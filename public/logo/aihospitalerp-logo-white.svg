@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="248" height="48" viewBox="0 0 248 48" fill="none" role="img" aria-label="AiHospitalERP">
+  <!-- Icon: rounded square with medical cross + pulse -->
+  <rect x="2" y="6" width="36" height="36" rx="10" fill="#FFFFFF"/>
+  <path d="M20 14v12M14 20h12" stroke="#7C3AED" stroke-width="3.2" stroke-linecap="round"/>
+  <path d="M11 32h4l2.5-5 3 8 2.5-3h5" stroke="#7C3AED" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.55"/>
+  <!-- Wordmark -->
+  <text x="48" y="31" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700" fill="#FFFFFF" letter-spacing="-0.5">AiHospital</text>
+  <text x="163" y="31" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700" fill="#C4B5FD" letter-spacing="-0.5">ERP</text>
+</svg>
