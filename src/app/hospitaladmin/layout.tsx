@@ -5,7 +5,7 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import {
   LayoutDashboard, CalendarDays, Users, UserRound, Settings, HelpCircle,
   LogOut, Search, MessageSquare, Building2, Stethoscope, ClipboardList,
-  IndianRupee, CreditCard, ChevronDown, User, LogIn, BedDouble, BarChart2, FileQuestion, BookOpen, Globe, Menu, X
+  IndianRupee, CreditCard, ChevronDown, User, LogIn, BedDouble, BarChart2, FileQuestion, BookOpen, Globe, Menu, X, Sparkles
 } from "lucide-react";
 import NotificationBell from "@/components/NotificationBell";
 import AppointmentAlertModal from "@/components/AppointmentAlertModal";
@@ -38,6 +38,7 @@ function getActiveId(pathname: string, tab: string | null): string {
   if (pathname.startsWith("/hospitaladmin/staff")) return "staff";
   if (pathname.startsWith("/hospitaladmin/doctors")) return "doctors";
   if (pathname.startsWith("/hospitaladmin/configure")) return "configure";
+  if (pathname.startsWith("/hospitaladmin/plans")) return "plans";
   if (pathname.startsWith("/hospitaladmin/profile")) return "profile";
   if (pathname.startsWith("/hospitaladmin/dashboard")) {
     if (tab === "inventory") return "inventory";
@@ -355,6 +356,18 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
                 <Building2 size={16} />
               </span>
               Configure Hospital
+            </button>
+
+            <button
+              className={`hd-nb${activeId === "plans" ? " on" : ""}`}
+              onClick={() => router.push("/hospitaladmin/plans")}
+              style={{ position: "relative" }}
+            >
+              {activeId === "plans" && <div className="hd-nb-dot" />}
+              <span style={{ color: activeId === "plans" ? "#0A6B70" : "#94a3b8", display: "flex" }}>
+                <Sparkles size={16} />
+              </span>
+              Plans
             </button>
 
             <button className="hd-nb" onClick={() => setSupportOpen(true)}>

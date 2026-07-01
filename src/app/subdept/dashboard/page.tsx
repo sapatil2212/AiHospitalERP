@@ -3765,7 +3765,7 @@ function SubDeptDashboardContent() {
                                 <div style={{display:"flex",gap:6}}>
                                   <button onClick={()=>setViewingRecord(r)} style={{width:28,height:28,borderRadius:8,border:"none",background:"#E6F4F4",color:"#0E898F",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}} title="View Details"><Eye size={13}/></button>
                                   <button onClick={()=>setEditingRecord(r)} style={{width:28,height:28,borderRadius:8,border:"none",background:"#fef3c7",color:"#d97706",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}} title="Edit"><Edit2 size={13}/></button>
-                                  <button onClick={()=>{setTransferTarget(r);setTransferForm({subDeptId:"",notes:""});}} style={{width:28,height:28,borderRadius:8,border:"none",background:"#f0fdf4",color:"#10b981",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}} title="Transfer"><ArrowRight size={13}/></button>
+                                  <button onClick={()=>{setTransferTarget(r);}} style={{width:28,height:28,borderRadius:8,border:"none",background:"#f0fdf4",color:"#10b981",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}} title="Transfer"><ArrowRight size={13}/></button>
                                   {r.appointment?.id && (
                                     <button onClick={()=>setViewPrescription(r.appointment)} style={{width:28,height:28,borderRadius:8,border:"none",background:"#fdf4ff",color:"#a855f7",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}} title="Prescription"><FileText size={13}/></button>
                                   )}

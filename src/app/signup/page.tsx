@@ -120,7 +120,7 @@ function HospitalSignupPageContent() {
     try {
       const res = await fetch("/api/auth/verify-otp", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ hospitalName: form.hospitalName, adminName: form.adminName, email: form.email, mobile: form.mobile, password: form.password, otp: otpString }),
+        body: JSON.stringify({ hospitalName: form.hospitalName, adminName: form.adminName, email: form.email, mobile: form.mobile, password: form.password, otp: otpString, plan: selectedPlan }),
       });
       const data = await res.json();
       if (res.ok && data.success) { setStep("success"); setTimeout(() => router.push("/login"), 3000); }
@@ -166,6 +166,18 @@ function HospitalSignupPageContent() {
 
         .mn-sp-title { font-size: 19px; font-weight: 800; color: #0F172A; letter-spacing: -0.03em; margin-bottom: 5px; }
         .mn-sp-sub { font-size: 11.5px; color: #64748B; line-height: 1.5; margin-bottom: 14px; }
+
+        .mn-sp-plans { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 6px; }
+        @media (max-width: 480px) { .mn-sp-plans { grid-template-columns: 1fr; gap: 6px; } }
+        .mn-sp-plan-card { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 10px 12px; border: 1.5px solid #E2E8F0; border-radius: 10px; background: #FAFAFA; cursor: pointer; font-family: 'Inter', sans-serif; text-align: left; transition: all 0.15s; }
+        .mn-sp-plan-card:hover { border-color: #C4B5FD; background: #FAF8FF; }
+        .mn-sp-plan-card.active { border-color: #7C3AED; background: #F5F3FF; box-shadow: 0 0 0 3px rgba(124,58,237,0.1); }
+        .mn-sp-plan-badge { position: absolute; top: -8px; right: 8px; background: #7C3AED; color: #fff; font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 100px; letter-spacing: 0.02em; }
+        .mn-sp-plan-name { font-size: 12.5px; font-weight: 700; color: #0F172A; }
+        .mn-sp-plan-price { font-size: 15px; font-weight: 800; color: #7C3AED; }
+        .mn-sp-plan-permo { font-size: 10.5px; font-weight: 600; color: #94A3B8; }
+        .mn-sp-plan-check { position: absolute; top: 8px; right: 8px; display: flex; }
+        .mn-sp-plan-hint { font-size: 10.5px; color: #94A3B8; margin-bottom: 14px; }
 
         .mn-sp-err { display: flex; align-items: flex-start; gap: 10px; background: #FEF2F2; border: 1px solid #FECACA; border-radius: 10px; padding: 11px 14px; margin-bottom: 18px; font-size: 13px; color: #DC2626; line-height: 1.5; animation: mn-shake 0.3s ease; }
         @keyframes mn-shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
@@ -245,6 +257,29 @@ function HospitalSignupPageContent() {
             <>
               <h1 className="mn-sp-title">Register Your Hospital</h1>
               <p className="mn-sp-sub">Fill in your hospital and admin details. We&apos;ll send a verification OTP to confirm your email.</p>
+
+              <div className="mn-sp-plans">
+                {PLANS.map((p) => (
+                  <button
+                    type="button"
+                    key={p.key}
+                    className={`mn-sp-plan-card${selectedPlan === p.key ? " active" : ""}`}
+                    onClick={() => setSelectedPlan(p.key)}
+                  >
+                    {p.badge && <span className="mn-sp-plan-badge">{p.badge}</span>}
+                    <span className="mn-sp-plan-name">{p.name}</span>
+                    <span className="mn-sp-plan-price">₹{p.monthlyPrice}<span className="mn-sp-plan-permo">/mo</span></span>
+                    <span className="mn-sp-plan-check">
+                      {selectedPlan === p.key ? (
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="2.5"><circle cx="12" cy="12" r="10" fill="#EDE9FE"/><path d="M8 12l3 3 5-6"/></svg>
+                      ) : (
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#CBD5E1" strokeWidth="2"><circle cx="12" cy="12" r="10"/></svg>
+                      )}
+                    </span>
+                  </button>
+                ))}
+              </div>
+              <p className="mn-sp-plan-hint">14-day free trial on any plan · No credit card required · Change anytime</p>
 
               {apiError && (
                 <div className="mn-sp-err">
@@ -464,4 +499,15 @@ function HospitalSignupPageContent() {
           )}
 
         </div>
-      </
+      </div>
+    </>
+  );
+}
+
+export default function HospitalSignupPage() {
+  return (
+    <Suspense fallback={null}>
+      <HospitalSignupPageContent />
+    </Suspense>
+  );
+}

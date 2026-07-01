@@ -609,11 +609,13 @@ function DoctorDashboardContent() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [updatingStatusId, setUpdatingStatusId] = useState<string | null>(null);
   const [rescheduleAppt, setRescheduleAppt] = useState<any>(null);
+  const [rescheduleSaving, setRescheduleSaving] = useState(false);
   const [activePlansCount, setActivePlansCount] = useState<number | null>(null);
   const [myPlans, setMyPlans] = useState<any[]>([]);
   const [plansLoading, setPlansLoading] = useState(false);
   const [plansFilter, setPlansFilter] = useState("");
   const [attendance, setAttendance] = useState<any[]>([]);
+  const [attendanceLoading, setAttendanceLoading] = useState(false);
   const [attendanceMonth] = useState(() => {
     const d = new Date();
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
@@ -788,6 +790,7 @@ function DoctorDashboardContent() {
     setAttendanceLoading(false);
   }, []);
 
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
   const handleCheckout = async () => {
     setCheckoutLoading(true);
     try {
@@ -815,32 +818,6 @@ function DoctorDashboardContent() {
       fetchAttendance(attendanceMonth);
     }
   }, [tab, doctor, attendanceMonth, fetchAttendance]);
-
-  const fetchWeeklySchedule = useCallback(async () => {
-    setScheduleLoading(true);
-    const d = await api("/api/doctor/availability");
-    if (d.success) {
-      setWeeklySchedule(d.data || {});
-      const sdays = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"];
-      setLocalSchedule(prev => {
-        const next = { ...prev };
-        sdays.forEach(day => {
-          const ex = (d.data || {})[day];
-          next[day] = ex
-            ? { startTime: ex.startTime || "09:00", endTime: ex.endTime || "17:00", slotDuration: ex.slotDuration || 30, isActive: ex.isActive !== false }
-            : { startTime: "09:00", endTime: "17:00", slotDuration: 30, isActive: false };
-        });
-        return next;
-      });
-    }
-    setScheduleLoading(false);
-  }, []);
-
-  useEffect(() => {
-    if (doctor && tab === "schedule-mgmt") {
-      fetchWeeklySchedule();
-    }
-  }, [tab, doctor, fetchWeeklySchedule]);
 
   // ── Load reports ──
   const loadReports = useCallback(async () => {

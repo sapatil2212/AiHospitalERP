@@ -17,7 +17,7 @@ interface DoctorContextType {
 
 const DoctorDashboardContext = createContext<DoctorContextType | null>(null);
 
-function getDeptAccent(): string {
+function getDeptAccent(_deptName?: string): string {
   return "#0E898F";
 }
 

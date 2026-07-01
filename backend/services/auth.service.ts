@@ -5,8 +5,14 @@ import { generateToken } from "../utils/jwt";
 import { Role } from "@prisma/client";
 import { verifyOTP } from "./otp.service";
 
+const PLAN_KEY_TO_ENUM: Record<string, "STARTER" | "PROFESSIONAL" | "ENTERPRISE"> = {
+  starter: "STARTER",
+  pro: "PROFESSIONAL",
+  enterprise: "ENTERPRISE",
+};
+
 export const signupHospitalService = async (data: any) => {
-  const { hospitalName, mobile, email, password, adminName, otp } = data;
+  const { hospitalName, mobile, email, password, adminName, otp, plan } = data;
 
   // Verify OTP
   try {
@@ -24,10 +30,11 @@ export const signupHospitalService = async (data: any) => {
   // Hash password
   const hashedPassword = await hashPassword(password);
 
-  // Create Hospital with 14-day free trial
+  // Create Hospital with 14-day free trial on the selected plan
   const now = new Date();
   const trialEnd = new Date(now);
   trialEnd.setDate(trialEnd.getDate() + 14);
+  const subscriptionPlan = PLAN_KEY_TO_ENUM[plan] || "PROFESSIONAL";
 
   const newHospital = await createHospital({
     name: hospitalName,
@@ -37,7 +44,9 @@ export const signupHospitalService = async (data: any) => {
     trialStartDate: now,
     trialEndDate: trialEnd,
     subscriptionStatus: "TRIAL",
-  });
+    subscriptionPlan,
+    billingCycle: "MONTHLY",
+  } as any);
 
   // Create Admin User
   const newUser = await createUser({

@@ -10,6 +10,7 @@ const verifySignupSchema = z.object({
   password: z.string().min(6),
   adminName: z.string().min(2),
   otp: z.string().length(6),
+  plan: z.enum(["starter", "pro", "enterprise"]).optional(),
 });
 
 export async function POST(req: NextRequest) {

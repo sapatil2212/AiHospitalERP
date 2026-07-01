@@ -10,7 +10,9 @@ import {
   countDoctors,
   DoctorQueryOptions,
 } from "../repositories/doctor.repo";
+import { findHospitalById } from "../repositories/hospital.repo";
 import { CreateDoctorInput, UpdateDoctorInput } from "../validations/doctor.validation";
+import { getPlanByEnum } from "@/lib/plans";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // DOCTOR SERVICE - Business logic layer
@@ -39,6 +41,20 @@ export const createDoctor = async (hospitalId: string, input: CreateDoctorInput)
       "DUPLICATE_EMAIL",
       409
     );
+  }
+
+  // Enforce plan-based doctor limit
+  const hospital = await findHospitalById(hospitalId);
+  const plan = getPlanByEnum((hospital as any)?.subscriptionPlan);
+  if (plan && plan.doctorLimit !== null) {
+    const currentCount = await countDoctors(hospitalId);
+    if (currentCount >= plan.doctorLimit) {
+      throw new DoctorServiceError(
+        `Your ${plan.name} plan allows up to ${plan.doctorLimit} doctors. Upgrade your plan to add more.`,
+        "PLAN_DOCTOR_LIMIT_REACHED",
+        403
+      );
+    }
   }
 
   // Create the doctor
