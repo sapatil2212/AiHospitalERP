@@ -1,376 +1,261 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Clock, Send, Loader2, Search, ChevronDown } from "lucide-react";
-import Image from "next/image";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import styles from "./contact.module.css";
+import {
+  Sparkles, Send, Loader2, Building2, User, Mail, Phone,
+  MapPin, CalendarDays, Clock, Check, ShieldCheck,
+} from "lucide-react";
+import SaasNavbar from "@/components/SaasNavbar";
+import SaasFooter from "@/components/SaasFooter";
+import styles from "./bookdemo.module.css";
 
-const COUNTRIES = [
-  "Afghanistan","Albania","Algeria","Andorra","Angola","Antigua and Barbuda","Argentina","Armenia","Australia","Austria",
-  "Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bhutan",
-  "Bolivia","Bosnia and Herzegovina","Botswana","Brazil","Brunei","Bulgaria","Burkina Faso","Burundi","Cabo Verde","Cambodia",
-  "Cameroon","Canada","Central African Republic","Chad","Chile","China","Colombia","Comoros","Congo","Costa Rica",
-  "Croatia","Cuba","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt",
-  "El Salvador","Equatorial Guinea","Eritrea","Estonia","Eswatini","Ethiopia","Fiji","Finland","France","Gabon",
-  "Gambia","Georgia","Germany","Ghana","Greece","Grenada","Guatemala","Guinea","Guinea-Bissau","Guyana",
-  "Haiti","Honduras","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Israel",
-  "Italy","Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kiribati","Kuwait","Kyrgyzstan","Laos",
-  "Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Madagascar","Malawi",
-  "Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova",
-  "Monaco","Mongolia","Montenegro","Morocco","Mozambique","Myanmar","Namibia","Nauru","Nepal","Netherlands",
-  "New Zealand","Nicaragua","Niger","Nigeria","North Korea","North Macedonia","Norway","Oman","Pakistan","Palau",
-  "Palestine","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Qatar","Romania",
-  "Russia","Rwanda","Saint Kitts and Nevis","Saint Lucia","Saint Vincent and the Grenadines","Samoa","San Marino",
-  "Sao Tome and Principe","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia",
-  "Solomon Islands","Somalia","South Africa","South Korea","South Sudan","Spain","Sri Lanka","Sudan","Suriname","Sweden",
-  "Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Timor-Leste","Togo","Tonga","Trinidad and Tobago",
-  "Tunisia","Turkey","Turkmenistan","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States","Uruguay",
-  "Uzbekistan","Vanuatu","Vatican City","Venezuela","Vietnam","Yemen","Zambia","Zimbabwe",
+const TIME_SLOTS = [
+  "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
+  "12:00", "12:30", "14:00", "14:30", "15:00", "15:30",
+  "16:00", "16:30", "17:00", "17:30", "18:00",
 ];
 
-const DEPARTMENTS = [
-  "Dental","Skin","Hair","HNF Cancer","Facial Trauma",
-  "Body Shaping","Nutrition","Sexual Health","Premium Aesthetic","Medical Tourism",
+const formatSlot = (t: string) => {
+  const [h, m] = t.split(":");
+  const hour = parseInt(h, 10);
+  return `${hour % 12 || 12}:${m} ${hour < 12 ? "AM" : "PM"}`;
+};
+
+const BENEFITS = [
+  "A personalized walkthrough of the entire HMS platform",
+  "AI prescriptions, OPD, IPD, billing & pharmacy in action",
+  "Pricing & onboarding tailored to your hospital",
+  "Zero obligation — cancel or reschedule anytime",
 ];
 
-const ENQUIRY_TYPES = [
-  "General Inquiry","Appointment Booking","Treatment Information","Cost Estimate","Feedback","Complaint","Other",
-];
+export default function BookDemoPage() {
+  const todayStr = new Date().toISOString().split("T")[0];
 
-/* ── Searchable Country Dropdown ── */
-function CountryDropdown({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-  const [open, setOpen] = useState(false);
-  const [search, setSearch] = useState("");
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
-
-  const filtered = COUNTRIES.filter(c => c.toLowerCase().includes(search.toLowerCase()));
-
-  return (
-    <div className={styles.dropdownWrap} ref={ref}>
-      <button type="button" className={styles.dropdownTrigger} onClick={() => setOpen(o => !o)}>
-        <span className={value ? styles.dropdownValue : styles.dropdownPlaceholder}>
-          {value || "Select country"}
-        </span>
-        <ChevronDown size={14} className={styles.dropdownChevron} />
-      </button>
-      {open && (
-        <div className={styles.dropdownPanel}>
-          <div className={styles.dropdownSearch}>
-            <Search size={14} />
-            <input
-              type="text"
-              placeholder="Search country..."
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              className={styles.dropdownSearchInput}
-              autoFocus
-            />
-          </div>
-          <ul className={styles.dropdownList}>
-            {filtered.length === 0 && <li className={styles.dropdownEmpty}>No results</li>}
-            {filtered.map(c => (
-              <li
-                key={c}
-                className={`${styles.dropdownOption} ${c === value ? styles.dropdownOptionActive : ""}`}
-                onClick={() => { onChange(c); setOpen(false); setSearch(""); }}
-              >
-                {c}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
-  );
-}
-
-/* ── Main Page ── */
-export default function ContactPage() {
   const [form, setForm] = useState({
-    fullName: "", mobile: "", email: "",
-    gender: "", city: "", state: "", country: "",
-    pincode: "", department: "", enquiryType: "", details: "",
+    hospitalName: "", adminName: "", email: "", mobile: "",
+    city: "", preferredDate: "", preferredTime: "", message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
   const [showModal, setShowModal] = useState(false);
+
+  const set = (name: string, value: string) => setForm((p) => ({ ...p, [name]: value }));
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => set(e.target.name, e.target.value);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmitStatus("idle");
+    setErrorMsg("");
     try {
-      const res = await fetch("/api/enquiries", {
+      const res = await fetch("/api/demo-requests", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
       const data = await res.json();
-      if (data.success) {
-        setSubmitStatus("success");
+      if (res.ok && data.success) {
         setShowModal(true);
-        setForm({ fullName: "", mobile: "", email: "", gender: "", city: "", state: "", country: "", pincode: "", department: "", enquiryType: "", details: "" });
-        setTimeout(() => { setShowModal(false); setSubmitStatus("idle"); }, 5000);
+        setForm({
+          hospitalName: "", adminName: "", email: "", mobile: "",
+          city: "", preferredDate: "", preferredTime: "", message: "",
+        });
       } else {
-        setSubmitStatus("error");
-        setTimeout(() => setSubmitStatus("idle"), 4000);
+        setErrorMsg(data.message || "Failed to submit your request. Please try again.");
       }
     } catch {
-      setSubmitStatus("error");
-      setTimeout(() => setSubmitStatus("idle"), 4000);
+      setErrorMsg("Network error. Please try again.");
     }
     setIsSubmitting(false);
   };
 
-  const set = (name: string, value: string) => setForm(prev => ({ ...prev, [name]: value }));
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => set(e.target.name, e.target.value);
-
   return (
     <>
-      <Navbar />
-      <main>
-        {/* Contact Form & Info — directly below navbar */}
-        <section className={styles.contactSection}>
-          <div className="container">
-            <div className={styles.contactGrid}>
-              {/* Left — Form */}
-              <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }}>
-                <div className={styles.formCard}>
-                  <h3 className={styles.formTitle}>Enquiry Form</h3>
+      <SaasNavbar />
+      <main className={styles.page}>
+        <div className={styles.wrap}>
+          {/* Intro */}
+          <motion.div
+            className={styles.intro}
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <span className={styles.badge}>
+              <Sparkles size={15} /> Free Product Demo
+            </span>
+            <h1 className={styles.title}>
+              See <span>AiHospitalERP</span> in action
+            </h1>
+            <p className={styles.subtitle}>
+              Book a live, personalized demo with our team. Pick a date and time that suits you,
+              and we&apos;ll show you exactly how to run your hospital smarter.
+            </p>
+          </motion.div>
 
-                  {submitStatus === "error" && (
-                    <div className={styles.alertError}>
-                      <p>Failed to submit enquiry. Please try again.</p>
+          {/* Card */}
+          <motion.div
+            className={styles.card}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, delay: 0.1 }}
+          >
+            {/* Brand aside */}
+            <aside className={styles.aside}>
+              <div className={styles.asideInner}>
+                <div className={styles.asideKicker}>Why book a demo</div>
+                <h2 className={styles.asideTitle}>Everything you need, shown live in 30 minutes</h2>
+                <p className={styles.asideText}>
+                  A product specialist will tailor the session to your workflows — from appointments
+                  to analytics — so you can decide with confidence.
+                </p>
+
+                <div className={styles.benefits}>
+                  {BENEFITS.map((b) => (
+                    <div key={b} className={styles.benefit}>
+                      <span className={styles.benefitIcon}><Check size={16} color="#fff" /></span>
+                      <span className={styles.benefitText}>{b}</span>
                     </div>
-                  )}
-
-                  <form className={styles.form} onSubmit={handleSubmit}>
-                    {/* Row 1: Full Name & Mobile */}
-                    <div className={styles.formRow}>
-                      <div className={styles.inputGroup}>
-                        <label htmlFor="fullName" className={styles.label}>Full Name <span className={styles.required}>*</span></label>
-                        <input type="text" id="fullName" name="fullName" required value={form.fullName} onChange={handleChange} placeholder="Your full name" className={styles.input} />
-                      </div>
-                      <div className={styles.inputGroup}>
-                        <label htmlFor="mobile" className={styles.label}>Mobile Number <span className={styles.required}>*</span></label>
-                        <input type="tel" id="mobile" name="mobile" required value={form.mobile} onChange={handleChange} placeholder="+91 98765 43210" className={styles.input} />
-                      </div>
-                    </div>
-
-                    {/* Row 2: Email */}
-                    <div className={styles.formRow}>
-                      <div className={styles.inputGroup}>
-                        <label htmlFor="email" className={styles.label}>Email Address</label>
-                        <input type="email" id="email" name="email" value={form.email} onChange={handleChange} placeholder="your@email.com" className={styles.input} />
-                      </div>
-                    </div>
-
-                    {/* Row 3: Gender & City */}
-                    <div className={styles.formRow}>
-                      <div className={styles.inputGroup}>
-                        <label htmlFor="gender" className={styles.label}>Gender</label>
-                        <select id="gender" name="gender" value={form.gender} onChange={handleChange} className={styles.select}>
-                          <option value="">Select gender</option>
-                          <option value="Male">Male</option>
-                          <option value="Female">Female</option>
-                          <option value="Other">Other</option>
-                        </select>
-                      </div>
-                      <div className={styles.inputGroup}>
-                        <label htmlFor="city" className={styles.label}>City</label>
-                        <input type="text" id="city" name="city" value={form.city} onChange={handleChange} placeholder="Your city" className={styles.input} />
-                      </div>
-                    </div>
-
-                    {/* Row 4: State & Country */}
-                    <div className={styles.formRow}>
-                      <div className={styles.inputGroup}>
-                        <label htmlFor="state" className={styles.label}>State</label>
-                        <input type="text" id="state" name="state" value={form.state} onChange={handleChange} placeholder="Your state" className={styles.input} />
-                      </div>
-                      <div className={styles.inputGroup}>
-                        <label className={styles.label}>Country</label>
-                        <CountryDropdown value={form.country} onChange={v => set("country", v)} />
-                      </div>
-                    </div>
-
-                    {/* Row 5: Pincode & Department */}
-                    <div className={styles.formRow}>
-                      <div className={styles.inputGroup}>
-                        <label htmlFor="pincode" className={styles.label}>Pincode / Zip Code</label>
-                        <input type="text" id="pincode" name="pincode" value={form.pincode} onChange={handleChange} placeholder="e.g. 411052" className={styles.input} />
-                      </div>
-                      <div className={styles.inputGroup}>
-                        <label htmlFor="department" className={styles.label}>Department <span className={styles.required}>*</span></label>
-                        <select id="department" name="department" required value={form.department} onChange={handleChange} className={styles.select}>
-                          <option value="">Select department</option>
-                          {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
-                        </select>
-                      </div>
-                    </div>
-
-                    {/* Row 6: Enquiry Type */}
-                    <div className={styles.inputGroup}>
-                      <label htmlFor="enquiryType" className={styles.label}>Enquiry Type</label>
-                      <select id="enquiryType" name="enquiryType" value={form.enquiryType} onChange={handleChange} className={styles.select}>
-                        <option value="">Select enquiry type</option>
-                        {ENQUIRY_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
-                      </select>
-                    </div>
-
-                    {/* Details */}
-                    <div className={styles.inputGroup}>
-                      <label htmlFor="details" className={styles.label}>Details</label>
-                      <textarea id="details" name="details" value={form.details} onChange={e => set("details", e.target.value)} placeholder="Please describe your enquiry in detail..." rows={4} className={styles.textarea} />
-                    </div>
-
-                    <button type="submit" disabled={isSubmitting} className={styles.submitBtn}>
-                      {isSubmitting ? (
-                        <><Loader2 size={16} className="spin-anim" /> Submitting...</>
-                      ) : (
-                        <><Send size={16} /> Submit Enquiry</>
-                      )}
-                    </button>
-                  </form>
+                  ))}
                 </div>
-              </motion.div>
 
-              {/* Right — Image & Contact Info */}
-              <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }}>
-                <div className={styles.rightCol}>
-                  <div className={styles.imageWrapper}>
-                    <Image src="/about/about-hero.webp" alt="Rajashree Hospital" width={640} height={300} priority />
+                <div className={styles.asideDivider} />
+
+                <div className={styles.stats}>
+                  <div>
+                    <div className={styles.statNum}>500+</div>
+                    <div className={styles.statLabel}>Departments run</div>
                   </div>
-
-                  <div className={styles.infoCard}>
-                    <div className={styles.infoRow}>
-                      <a href="tel:+919059053938" className={styles.infoItem}>
-                        <div className={styles.infoIcon} style={{ background: "#D1FAE5", color: "#10B981" }}>
-                          <Phone size={16} />
-                        </div>
-                        <div>
-                          <p className={styles.infoLabel}>Phone</p>
-                          <p className={styles.infoValue}>+91 90590 53938</p>
-                        </div>
-                      </a>
-                      <div className={styles.infoItem}>
-                        <div className={styles.infoIcon} style={{ background: "#FEF3C7", color: "#F59E0B" }}>
-                          <Clock size={16} />
-                        </div>
-                        <div>
-                          <p className={styles.infoLabel}>Working Hours</p>
-                          <p className={styles.infoValue}>Mon – Sat: 8 AM – 8 PM</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <a href="mailto:info@aihospitalerp.com" className={styles.infoItem}>
-                      <div className={styles.infoIcon} style={{ background: "#EDE9FE", color: "#8B5CF6" }}>
-                        <Mail size={16} />
-                      </div>
-                      <div>
-                        <p className={styles.infoLabel}>Email</p>
-                        <p className={styles.infoValueLg}>info@aihospitalerp.com</p>
-                      </div>
-                    </a>
-
-                    <a href="https://maps.google.com/?q=3+Alampat+Business+Centre+Krushi+Nagar+College+Road+Nashik+422001" target="_blank" rel="noopener noreferrer" className={styles.infoItem}>
-                      <div className={styles.infoIcon} style={{ background: "#E6F4F4", color: "#0E898F" }}>
-                        <MapPin size={16} />
-                      </div>
-                      <div>
-                        <p className={styles.infoLabel}>Address</p>
-                        <p className={styles.infoValueLg}>
-                          3/Alampat Business Centre, Near Cycle Circle,<br />
-                          Krushi Nagar, College Road, Nashik 422001
-                        </p>
-                      </div>
-                    </a>
+                  <div>
+                    <div className={styles.statNum}>30 min</div>
+                    <div className={styles.statLabel}>Avg. demo length</div>
+                  </div>
+                  <div>
+                    <div className={styles.statNum}>14-day</div>
+                    <div className={styles.statLabel}>Free trial after</div>
                   </div>
                 </div>
-              </motion.div>
-
-              {/* Mobile Contact Info */}
-              <div className={styles.mobileInfoCard}>
-                <a href="tel:+919059053938" className={styles.infoItem}>
-                  <div className={styles.infoIcon} style={{ background: "#D1FAE5", color: "#10B981" }}>
-                    <Phone size={16} />
-                  </div>
-                  <div>
-                    <p className={styles.infoLabel}>Phone</p>
-                    <p className={styles.infoValue}>+91 90590 53938</p>
-                  </div>
-                </a>
-                <div className={styles.infoItem}>
-                  <div className={styles.infoIcon} style={{ background: "#FEF3C7", color: "#F59E0B" }}>
-                    <Clock size={16} />
-                  </div>
-                  <div>
-                    <p className={styles.infoLabel}>Working Hours</p>
-                    <p className={styles.infoValue}>Mon – Sat: 8 AM – 8 PM</p>
-                  </div>
-                </div>
-                <a href="mailto:info@aihospitalerp.com" className={styles.infoItem}>
-                  <div className={styles.infoIcon} style={{ background: "#EDE9FE", color: "#8B5CF6" }}>
-                    <Mail size={16} />
-                  </div>
-                  <div>
-                    <p className={styles.infoLabel}>Email</p>
-                    <p className={styles.infoValue}>info@aihospitalerp.com</p>
-                  </div>
-                </a>
-                <a href="https://maps.google.com/?q=3+Alampat+Business+Centre+Krushi+Nagar+College+Road+Nashik+422001" target="_blank" rel="noopener noreferrer" className={styles.infoItem}>
-                  <div className={styles.infoIcon} style={{ background: "#E6F4F4", color: "#0E898F" }}>
-                    <MapPin size={16} />
-                  </div>
-                  <div>
-                    <p className={styles.infoLabel}>Address</p>
-                    <p className={styles.infoValue}>3/Alampat Business Centre, Near Cycle Circle, Krushi Nagar, College Road, Nashik 422001</p>
-                  </div>
-                </a>
               </div>
-            </div>
-          </div>
-        </section>
-      </main>
-      <Footer />
+            </aside>
 
-      {/* ── Success Modal ── */}
+            {/* Form */}
+            <section className={styles.formPanel}>
+              <h3 className={styles.formHeading}>Tell us about you</h3>
+              <p className={styles.formSub}>We&apos;ll confirm your slot over email within one business day.</p>
+
+              {errorMsg && <div className={styles.alertError}>{errorMsg}</div>}
+
+              <form className={styles.form} onSubmit={handleSubmit}>
+                <div className={styles.row}>
+                  <div className={styles.field}>
+                    <label htmlFor="hospitalName" className={styles.label}>Hospital / Clinic <span className={styles.req}>*</span></label>
+                    <div className={styles.inputWrap}>
+                      <input id="hospitalName" name="hospitalName" required value={form.hospitalName} onChange={handleChange} placeholder="City Medical Center" className={styles.input} />
+                      <span className={styles.inputIcon}><Building2 size={16} /></span>
+                    </div>
+                  </div>
+                  <div className={styles.field}>
+                    <label htmlFor="adminName" className={styles.label}>Your Name <span className={styles.req}>*</span></label>
+                    <div className={styles.inputWrap}>
+                      <input id="adminName" name="adminName" required value={form.adminName} onChange={handleChange} placeholder="Dr. Jane Doe" className={styles.input} />
+                      <span className={styles.inputIcon}><User size={16} /></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={styles.row}>
+                  <div className={styles.field}>
+                    <label htmlFor="email" className={styles.label}>Work Email <span className={styles.req}>*</span></label>
+                    <div className={styles.inputWrap}>
+                      <input type="email" id="email" name="email" required value={form.email} onChange={handleChange} placeholder="admin@hospital.com" className={styles.input} />
+                      <span className={styles.inputIcon}><Mail size={16} /></span>
+                    </div>
+                  </div>
+                  <div className={styles.field}>
+                    <label htmlFor="mobile" className={styles.label}>Mobile <span className={styles.req}>*</span></label>
+                    <div className={styles.inputWrap}>
+                      <input type="tel" id="mobile" name="mobile" required value={form.mobile} onChange={handleChange} placeholder="+91 98765 43210" className={styles.input} />
+                      <span className={styles.inputIcon}><Phone size={16} /></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={styles.row}>
+                  <div className={styles.field}>
+                    <label htmlFor="city" className={styles.label}>City</label>
+                    <div className={styles.inputWrap}>
+                      <input id="city" name="city" value={form.city} onChange={handleChange} placeholder="Pune" className={styles.input} />
+                      <span className={styles.inputIcon}><MapPin size={16} /></span>
+                    </div>
+                  </div>
+                  <div className={styles.field}>
+                    <label htmlFor="preferredDate" className={styles.label}>Preferred Date <span className={styles.req}>*</span></label>
+                    <div className={styles.inputWrap}>
+                      <input type="date" id="preferredDate" name="preferredDate" required min={todayStr} value={form.preferredDate} onChange={handleChange} className={styles.input} />
+                      <span className={styles.inputIcon}><CalendarDays size={16} /></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={styles.field}>
+                  <label htmlFor="preferredTime" className={styles.label}>Preferred Time <span className={styles.req}>*</span></label>
+                  <div className={styles.inputWrap}>
+                    <select id="preferredTime" name="preferredTime" required value={form.preferredTime} onChange={handleChange} className={styles.select}>
+                      <option value="">Select a time slot</option>
+                      {TIME_SLOTS.map((t) => <option key={t} value={t}>{formatSlot(t)}</option>)}
+                    </select>
+                    <span className={styles.inputIcon}><Clock size={16} /></span>
+                  </div>
+                </div>
+
+                <div className={styles.field}>
+                  <label htmlFor="message" className={styles.label}>Anything specific you&apos;d like to see?</label>
+                  <textarea id="message" name="message" value={form.message} onChange={handleChange} rows={3} placeholder="Hospital size, departments, or specific needs..." className={styles.textarea} />
+                </div>
+
+                <button type="submit" disabled={isSubmitting} className={styles.submitBtn}>
+                  {isSubmitting ? (
+                    <><Loader2 size={18} className={styles.spin} /> Submitting...</>
+                  ) : (
+                    <><Send size={17} /> Book My Demo</>
+                  )}
+                </button>
+
+                <p className={styles.consent}>
+                  <ShieldCheck size={13} style={{ verticalAlign: "-2px", marginRight: 4 }} />
+                  Your details are safe with us. By submitting you agree to our{" "}
+                  <a href="/privacy-policy">Privacy Policy</a>.
+                </p>
+              </form>
+            </section>
+          </motion.div>
+        </div>
+      </main>
+      <SaasFooter />
+
+      {/* Success Modal */}
       {showModal && (
-        <div className={styles.modalOverlay} onClick={() => { setShowModal(false); setSubmitStatus("idle"); }}>
+        <div className={styles.modalOverlay} onClick={() => setShowModal(false)}>
           <motion.div
             className={styles.modalCard}
-            initial={{ opacity: 0, scale: 0.75, y: 30 }}
+            initial={{ opacity: 0, scale: 0.8, y: 24 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.75, y: 30 }}
             transition={{ type: "spring", stiffness: 260, damping: 20 }}
-            onClick={e => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
           >
-            {/* Animated Tick */}
             <div className={styles.tickCircle}>
               <svg viewBox="0 0 52 52" className={styles.tickSvg}>
                 <circle className={styles.tickCircleBg} cx="26" cy="26" r="25" fill="none" />
                 <path className={styles.tickCheck} fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
               </svg>
             </div>
-
-            <h3 className={styles.modalTitle}>Enquiry Submitted!</h3>
-            <p className={styles.modalText}>Thank you for reaching out. Our team will get back to you shortly.</p>
-
-            <button className={styles.modalBtn} onClick={() => { setShowModal(false); setSubmitStatus("idle"); }}>
-              Close
-            </button>
+            <h3 className={styles.modalTitle}>Demo Request Sent!</h3>
+            <p className={styles.modalText}>
+              Thanks for your interest. Our team will reach out shortly to confirm your demo slot.
+            </p>
+            <button className={styles.modalBtn} onClick={() => setShowModal(false)}>Done</button>
           </motion.div>
         </div>
       )}

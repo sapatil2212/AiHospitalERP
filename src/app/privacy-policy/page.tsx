@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Shield, Calendar, ArrowRight } from "lucide-react";
+import { Shield, Calendar, ArrowRight, Phone, Mail, MapPin } from "lucide-react";
 import styles from "../policy.module.css";
 
 const PURPLE = "#7C3AED";
@@ -63,6 +63,10 @@ export default function PrivacyPolicyPage() {
         .mn-footer-links { display: flex; flex-direction: column; gap: 12px; }
         .mn-footer-links a { font-size: 14px; color: #94A3B8; text-decoration: none; transition: color 0.2s; }
         .mn-footer-links a:hover { color: #fff; }
+        .mn-footer-contact { display: flex; flex-direction: column; gap: 14px; }
+        .mn-footer-contact a, .mn-footer-contact-item { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: #94A3B8; text-decoration: none; transition: color 0.2s; line-height: 1.4; }
+        .mn-footer-contact a:hover { color: #fff; }
+        .mn-footer-contact svg { flex-shrink: 0; margin-top: 1px; color: #A78BFA; }
         .mn-footer-divider { height: 1px; background: rgba(255,255,255,0.1); margin-bottom: 24px; }
         .mn-footer-bottom { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
         .mn-footer-copy { font-size: 13px; color: #64748B; }
@@ -243,8 +247,9 @@ export default function PrivacyPolicyPage() {
                   If you have questions about this policy or need to execute a BAA, please contact our privacy officer:
                 </p>
                 <ul className={styles.list}>
-                  <li className={styles.listItem}><strong>Email:</strong> <a href="mailto:privacy@aihospitalerp.com" className={styles.contactLink}>privacy@aihospitalerp.com</a></li>
-                  <li className={styles.listItem}><strong>Address:</strong> 3/Alampat Business Centre, Near Cycle Circle, Krushi Nagar, Nashik 422001</li>
+                  <li className={styles.listItem}><strong>Email:</strong> <a href="mailto:aihospitalerp@gmail.com" className={styles.contactLink}>aihospitalerp@gmail.com</a></li>
+                  <li className={styles.listItem}><strong>Phone:</strong> +91 9168 08 1355</li>
+                  <li className={styles.listItem}><strong>Address:</strong> Pune, Maharashtra, India</li>
                 </ul>
               </div>
             </div>
@@ -263,35 +268,50 @@ export default function PrivacyPolicyPage() {
               <p>Smarter healthcare connecting doctors and patients. The multi-tenant HMS SaaS platform for modern healthcare providers.</p>
             </div>
             <div>
-              <div className="mn-footer-col-title">Product</div>
-              <div className="mn-footer-links">
-                <Link href="/#solutions">Solutions</Link>
-                <Link href="/#features">Features</Link>
-                <Link href="/#pricing">Pricing</Link>
-                <Link href="/signup">Get Started</Link>
-              </div>
-            </div>
-            <div>
               <div className="mn-footer-col-title">Company</div>
               <div className="mn-footer-links">
-                <Link href="/#">About Us</Link>
-                <Link href="/#">Blog</Link>
-                <Link href="/#">Careers</Link>
-                <Link href="/contact">Contact</Link>
+                <Link href="/privacy-policy">Privacy Policy</Link>
+                <Link href="/terms-of-service">Terms &amp; Conditions</Link>
+                <Link href="/refund-policy">Refund &amp; Cancellation Policy</Link>
+                <Link href="/shipping-delivery-policy">Shipping &amp; Delivery Policy</Link>
+                <Link href="/contact">Contact Us</Link>
+                <Link href="/about">About Us</Link>
+                <Link href="/cookie-policy">Cookie Policy</Link>
+                <Link href="/security-policy">Security Policy</Link>
               </div>
             </div>
             <div>
-              <div className="mn-footer-col-title">Legal</div>
+              <div className="mn-footer-col-title">Features</div>
               <div className="mn-footer-links">
-                <Link href="/privacy-policy">Privacy Policy</Link>
-                <Link href="/terms-of-service">Terms of Service</Link>
-                <Link href="/cookie-policy">Cookie Policy</Link>
+                <Link href="/#features">Appointment Scheduling</Link>
+                <Link href="/#features">Patient Management</Link>
+                <Link href="/#features">Revenue Tracking</Link>
+                <Link href="/#features">Doctor Portal</Link>
+                <Link href="/#features">Analytics Dashboard</Link>
+                <Link href="/#features">Multi-Clinic Support</Link>
+              </div>
+            </div>
+            <div>
+              <div className="mn-footer-col-title">Contact</div>
+              <div className="mn-footer-contact">
+                <a href="tel:+919168081355">
+                  <Phone size={15} />
+                  <span>+91 9168 08 1355</span>
+                </a>
+                <a href="mailto:aihospitalerp@gmail.com">
+                  <Mail size={15} />
+                  <span>aihospitalerp@gmail.com</span>
+                </a>
+                <div className="mn-footer-contact-item">
+                  <MapPin size={15} />
+                  <span>Pune, Maharashtra, India</span>
+                </div>
               </div>
             </div>
           </div>
           <div className="mn-footer-divider" />
           <div className="mn-footer-bottom">
-            <p className="mn-footer-copy">© {new Date().getFullYear()} BookMyTime Systems Inc. All rights reserved. | A product of <a href="https://brightwavedigital.com/" target="_blank" rel="noopener noreferrer" style={{ color: '#A78BFA', textDecoration: 'none', fontWeight: 600 }}>Brightwave Digital Products</a></p>
+            <p className="mn-footer-copy">Copyright © {new Date().getFullYear()} PrimeInbox All rights reserved. | A product of <a href="https://brightwavedigital.com/" target="_blank" rel="noopener noreferrer" style={{ color: '#A78BFA', textDecoration: 'none', fontWeight: 600 }}>Brightwave Digital Products</a></p>
             <div className="mn-footer-legal">
               <Link href="/privacy-policy">Privacy</Link>
               <Link href="/terms-of-service">Terms</Link>

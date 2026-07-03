@@ -59,7 +59,6 @@ const PUBLIC_PREFIXES = [
   "/about",
   "/blog",
   "/contact",
-  "/treatments",
 ];
 
 export async function middleware(req: NextRequest) {

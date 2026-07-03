@@ -14,11 +14,11 @@ function LoginPageContent() {
     const err = searchParams.get("error");
     if (err) {
       const messages: Record<string, string> = {
-        TRIAL_EXPIRED: "Your 14-day free trial has ended. Please contact AiHospitalERP support to subscribe and continue using the platform. Email: support@aihospitalerp.com | Phone: +91-9876543210",
-        SUBSCRIPTION_EXPIRED: "Your subscription has expired. Please contact AiHospitalERP support to renew your plan. Email: support@aihospitalerp.com | Phone: +91-9876543210",
-        ACCOUNT_SUSPENDED: "Your hospital account has been suspended. Please contact AiHospitalERP support for assistance. Email: support@aihospitalerp.com | Phone: +91-9876543210",
-        ACCOUNT_CANCELLED: "Your hospital subscription has been cancelled. Please contact AiHospitalERP support to reactivate. Email: support@aihospitalerp.com | Phone: +91-9876543210",
-        HOSPITAL_DISABLED: "Your hospital account is currently disabled. Please contact AiHospitalERP support for assistance. Email: support@aihospitalerp.com | Phone: +91-9876543210",
+        TRIAL_EXPIRED: "Your 14-day free trial has ended. Please contact AiHospitalERP support to subscribe and continue using the platform. Email: aihospitalerp@gmail.com | Phone: +91 9168 08 1355",
+        SUBSCRIPTION_EXPIRED: "Your subscription has expired. Please contact AiHospitalERP support to renew your plan. Email: aihospitalerp@gmail.com | Phone: +91 9168 08 1355",
+        ACCOUNT_SUSPENDED: "Your hospital account has been suspended. Please contact AiHospitalERP support for assistance. Email: aihospitalerp@gmail.com | Phone: +91 9168 08 1355",
+        ACCOUNT_CANCELLED: "Your hospital subscription has been cancelled. Please contact AiHospitalERP support to reactivate. Email: aihospitalerp@gmail.com | Phone: +91 9168 08 1355",
+        HOSPITAL_DISABLED: "Your hospital account is currently disabled. Please contact AiHospitalERP support for assistance. Email: aihospitalerp@gmail.com | Phone: +91 9168 08 1355",
       };
       if (messages[err]) {
         setTrialPopup({ type: err, message: messages[err] });
@@ -586,11 +586,11 @@ function LoginPageContent() {
                     <div style={{ fontSize: 11, fontWeight: 700, color: "#64748B", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 10 }}>Contact Support</div>
                     <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-8.97 5.7a1.94 1.94 0 01-2.06 0L2 7"/></svg>
-                      <a href="mailto:support@aihospitalerp.com" style={{ fontSize: 13, color: "#7C3AED", fontWeight: 600, textDecoration: "none" }}>support@aihospitalerp.com</a>
+                      <a href="mailto:aihospitalerp@gmail.com" style={{ fontSize: 13, color: "#7C3AED", fontWeight: 600, textDecoration: "none" }}>aihospitalerp@gmail.com</a>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-                      <a href="tel:+919876543210" style={{ fontSize: 13, color: "#7C3AED", fontWeight: 600, textDecoration: "none" }}>+91-9876543210</a>
+                      <a href="tel:+919168081355" style={{ fontSize: 13, color: "#7C3AED", fontWeight: 600, textDecoration: "none" }}>+91 9168 08 1355</a>
                     </div>
                   </div>
                   <button onClick={() => setTrialPopup(null)} style={{ width: "100%", padding: 12, border: "none", borderRadius: 10, fontSize: 14, fontWeight: 700, fontFamily: "'Inter', sans-serif", cursor: "pointer", background: "linear-gradient(135deg, #7C3AED, #6D28D9)", color: "#fff", boxShadow: "0 3px 12px rgba(124,58,237,0.25)", transition: "all 0.15s" }}>

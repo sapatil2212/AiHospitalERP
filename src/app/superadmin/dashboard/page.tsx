@@ -7,6 +7,7 @@ import {
   LogOut, Search, Bell, CheckCircle2, Plus,
   Shield, X, ChevronDown, Eye, Power, Trash2, MoreVertical,
   Menu, CreditCard, RefreshCcw, Ban, Play, DollarSign, Users, Stethoscope,
+  Inbox, CalendarClock, Phone, Mail,
 } from "lucide-react";
 
 type Hospital = {
@@ -22,7 +23,38 @@ type Hospital = {
 type ActivityItem = { time: string; msg: string; type: string };
 type DashboardStats = { totalHospitals: number; verifiedHospitals: number; pendingHospitals: number; totalPatients: number; totalDoctors: number; totalStaff: number; totalAppointments: number };
 type MonthlyGrowth = { month: string; value: number };
-type Tab = "overview" | "hospitals" | "activity" | "settings";
+type DemoRequest = {
+  id: string; hospitalName: string; adminName: string; email: string;
+  mobile: string; city: string | null; preferredDate: string | null;
+  preferredTime: string | null; message: string | null; status: string;
+  createdAt: string;
+};
+type DemoStats = { new: number; contacted: number; scheduled: number; converted: number; closed: number; total: number };
+type Tab = "overview" | "hospitals" | "demos" | "activity" | "settings";
+
+const DEMO_STATUSES = ["NEW", "CONTACTED", "SCHEDULED", "CONVERTED", "CLOSED"];
+
+const demoStatusStyle = (s: string): { color: string; bg: string; dot: string } => {
+  switch (s) {
+    case "NEW": return { color: "#1d4ed8", bg: "#eff6ff", dot: "#3b82f6" };
+    case "CONTACTED": return { color: "#b45309", bg: "#fffbeb", dot: "#f59e0b" };
+    case "SCHEDULED": return { color: "#7c3aed", bg: "#f5f3ff", dot: "#8b5cf6" };
+    case "CONVERTED": return { color: "#15803d", bg: "#f0fdf4", dot: "#22c55e" };
+    case "CLOSED": return { color: "#64748b", bg: "#f1f5f9", dot: "#94a3b8" };
+    default: return { color: "#64748b", bg: "#f1f5f9", dot: "#94a3b8" };
+  }
+};
+
+const formatDemoDate = (d: string | null) => {
+  if (!d) return "—";
+  try { return new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }); }
+  catch { return d; }
+};
+const formatDemoTime = (t: string | null) => {
+  if (!t) return "";
+  if (t.includes(":")) { const [h, m] = t.split(":"); const hr = parseInt(h, 10); return `${hr % 12 || 12}:${m} ${hr < 12 ? "AM" : "PM"}`; }
+  return t;
+};
 
 const CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
@@ -241,6 +273,12 @@ export default function SuperAdminDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [supportOpen, setSupportOpen] = useState(false);
   const [hospitals, setHospitals] = useState<Hospital[]>([]);
+  const [demoRequests, setDemoRequests] = useState<DemoRequest[]>([]);
+  const [demoStats, setDemoStats] = useState<DemoStats>({ new: 0, contacted: 0, scheduled: 0, converted: 0, closed: 0, total: 0 });
+  const [demoLoading, setDemoLoading] = useState(true);
+  const [demoStatusUpdating, setDemoStatusUpdating] = useState<string | null>(null);
+  const [demoDeleting, setDemoDeleting] = useState<string | null>(null);
+  const [viewDemo, setViewDemo] = useState<DemoRequest | null>(null);
   const [stats, setStats] = useState<DashboardStats>({ totalHospitals: 0, verifiedHospitals: 0, pendingHospitals: 0, totalPatients: 0, totalDoctors: 0, totalStaff: 0, totalAppointments: 0 });
   const [recentActivity, setRecentActivity] = useState<ActivityItem[]>([]);
   const [dataLoading, setDataLoading] = useState(true);
@@ -361,6 +399,44 @@ export default function SuperAdminDashboard() {
     }).catch(console.error).finally(() => setDataLoading(false));
   }, [loading]);
 
+  const loadDemoRequests = () => {
+    setDemoLoading(true);
+    fetch("/api/demo-requests", { credentials: "include" }).then(r => r.json()).then(d => {
+      if (d.success) { setDemoRequests(d.data.requests || []); setDemoStats(d.data.stats); }
+    }).catch(console.error).finally(() => setDemoLoading(false));
+  };
+
+  useEffect(() => {
+    if (loading) return;
+    loadDemoRequests();
+  }, [loading]);
+
+  const updateDemoStatus = async (id: string, status: string) => {
+    setDemoStatusUpdating(id);
+    try {
+      const res = await fetch(`/api/demo-requests/${id}`, {
+        method: "PATCH", headers: { "Content-Type": "application/json" },
+        credentials: "include", body: JSON.stringify({ status }),
+      });
+      const d = await res.json();
+      if (d.success) {
+        setDemoRequests(prev => prev.map(x => x.id === id ? { ...x, status } : x));
+        loadDemoRequests();
+      }
+    } catch (e) { console.error(e); }
+    finally { setDemoStatusUpdating(null); }
+  };
+
+  const deleteDemoRequest = async (id: string) => {
+    setDemoDeleting(id);
+    try {
+      const res = await fetch(`/api/demo-requests/${id}`, { method: "DELETE", credentials: "include" });
+      const d = await res.json();
+      if (d.success) { setDemoRequests(prev => prev.filter(x => x.id !== id)); setViewDemo(null); loadDemoRequests(); }
+    } catch (e) { console.error(e); }
+    finally { setDemoDeleting(null); }
+  };
+
   useEffect(() => {
     if (loading) return;
     const es = new EventSource("/api/notifications/stream");
@@ -473,6 +549,7 @@ export default function SuperAdminDashboard() {
   const NAV: { id: Tab; label: string; icon: React.ReactNode }[] = [
     { id: "overview", label: "Dashboard", icon: <LayoutDashboard size={16} /> },
     { id: "hospitals", label: "Hospitals", icon: <Building2 size={16} /> },
+    { id: "demos", label: "Demo Requests", icon: <Inbox size={16} /> },
     { id: "activity", label: "Activity Log", icon: <Activity size={16} /> },
     { id: "settings", label: "Settings", icon: <Settings size={16} /> },
   ];
@@ -1086,6 +1163,116 @@ export default function SuperAdminDashboard() {
               </>
             )}
 
+            {/* ─── Demo Requests ─── */}
+            {tab === "demos" && (
+              <>
+                <div className="sa-page-header">
+                  <div className="sa-page-title">Demo Requests</div>
+                  <div className="sa-page-sub">Leads submitted from the website Contact / Book a Demo page</div>
+                </div>
+
+                {/* Stats */}
+                <div className="sa-stats-grid">
+                  {[
+                    { label: "Total Requests", val: demoStats.total, sub: "all time", icon: <Inbox size={20} color="#fff" />, iconBg: "#dc2626" },
+                    { label: "New", val: demoStats.new, sub: "awaiting contact", icon: <Bell size={20} color="#fff" />, iconBg: "#3b82f6" },
+                    { label: "Scheduled", val: demoStats.scheduled, sub: "demo booked", icon: <CalendarClock size={20} color="#fff" />, iconBg: "#8b5cf6" },
+                    { label: "Converted", val: demoStats.converted, sub: "became customers", icon: <CheckCircle2 size={20} color="#fff" />, iconBg: "#16a34a" },
+                  ].map((s) => (
+                    <div key={s.label} className="sa-stat-card">
+                      <div className="sa-stat-icon" style={{ background: s.iconBg }}>{s.icon}</div>
+                      <div>
+                        <div className="sa-stat-label">{s.label}</div>
+                        <div className="sa-stat-val">{s.val}</div>
+                        <div className="sa-stat-sub">{s.sub}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="sa-dashboard-card">
+                  <div className="sa-dashboard-card-header">
+                    <div className="sa-dashboard-card-header-left">
+                      <div className="sa-dashboard-card-title">All Demo Requests</div>
+                      <div className="sa-dashboard-card-sub">{demoRequests.length} request{demoRequests.length === 1 ? "" : "s"}</div>
+                    </div>
+                    <button className="sa-btn sa-btn-ghost sa-btn-sm" onClick={loadDemoRequests} disabled={demoLoading}>
+                      <RefreshCcw size={14} /> Refresh
+                    </button>
+                  </div>
+                  <div className="sa-dashboard-card-body" style={{ padding: 0 }}>
+                    {demoLoading ? (
+                      <div className="sa-empty"><div className="sa-spin sa-spin-dark" /><div className="sa-empty-sub">Loading demo requests...</div></div>
+                    ) : demoRequests.length === 0 ? (
+                      <div className="sa-empty">
+                        <div className="sa-empty-icon"><Inbox size={22} color="#94a3b8" /></div>
+                        <div className="sa-empty-title">No demo requests yet</div>
+                        <div className="sa-empty-sub">New requests from the Contact page will appear here</div>
+                      </div>
+                    ) : (
+                      <div className="sa-table-wrap">
+                        <table className="sa-table">
+                          <thead>
+                            <tr>
+                              <th>Hospital / Contact</th>
+                              <th>Contact Info</th>
+                              <th>Preferred Slot</th>
+                              <th>Submitted</th>
+                              <th>Status</th>
+                              <th style={{ textAlign: "right" }}>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {demoRequests.map((d) => {
+                              const st = demoStatusStyle(d.status);
+                              return (
+                                <tr key={d.id}>
+                                  <td>
+                                    <div className="sa-td-main">{d.hospitalName}</div>
+                                    <div className="sa-td-sub">{d.adminName}{d.city ? ` · ${d.city}` : ""}</div>
+                                  </td>
+                                  <td>
+                                    <div className="sa-td-sub" style={{ display: "flex", alignItems: "center", gap: 6 }}><Mail size={12} /> {d.email}</div>
+                                    <div className="sa-td-sub" style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 3 }}><Phone size={12} /> {d.mobile}</div>
+                                  </td>
+                                  <td>
+                                    <div className="sa-td-main" style={{ fontSize: 12 }}>{formatDemoDate(d.preferredDate)}</div>
+                                    <div className="sa-td-sub">{formatDemoTime(d.preferredTime)}</div>
+                                  </td>
+                                  <td>
+                                    <div className="sa-td-sub">{formatDemoDate(d.createdAt)}</div>
+                                  </td>
+                                  <td>
+                                    <select
+                                      className="sa-select"
+                                      style={{ height: 32, fontSize: 12, width: 140, color: st.color, background: st.bg, borderColor: "transparent", fontWeight: 600 }}
+                                      value={d.status}
+                                      disabled={demoStatusUpdating === d.id}
+                                      onChange={(e) => updateDemoStatus(d.id, e.target.value)}
+                                    >
+                                      {DEMO_STATUSES.map((s) => <option key={s} value={s}>{s.charAt(0) + s.slice(1).toLowerCase()}</option>)}
+                                    </select>
+                                  </td>
+                                  <td>
+                                    <div style={{ display: "flex", gap: 6, justifyContent: "flex-end" }}>
+                                      <button className="sa-action-btn" title="View details" onClick={() => setViewDemo(d)}><Eye size={14} /></button>
+                                      <button className="sa-action-btn" title="Delete" style={{ color: "#ef4444" }} disabled={demoDeleting === d.id} onClick={() => deleteDemoRequest(d.id)}>
+                                        {demoDeleting === d.id ? <span className="sa-spin sa-spin-dark" /> : <Trash2 size={14} />}
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
+
             {/* ─── Activity ─── */}
             {tab === "activity" && (
               <>
@@ -1192,6 +1379,46 @@ export default function SuperAdminDashboard() {
             </button>
           </div>
         </>
+      )}
+
+      {/* ─── Demo Request Detail Modal ─── */}
+      {viewDemo && (
+        <div className="sa-modal-backdrop" onClick={() => setViewDemo(null)}>
+          <div className="sa-modal" style={{ maxWidth: 480 }} onClick={(e) => e.stopPropagation()}>
+            <div className="sa-modal-header">
+              <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+                <div className="sa-modal-icon" style={{ background: "#f5f3ff" }}><Inbox size={20} color="#7c3aed" /></div>
+                <div>
+                  <div className="sa-modal-title">{viewDemo.hospitalName}</div>
+                  <div className="sa-modal-sub">Demo request from {viewDemo.adminName}</div>
+                </div>
+              </div>
+              <button className="sa-modal-close" onClick={() => setViewDemo(null)}><X size={16} color="#64748b" /></button>
+            </div>
+            <div className="sa-modal-body">
+              <div className="sa-info-block">
+                <div className="sa-info-row"><span className="sa-info-key">Contact Name</span><span className="sa-info-val">{viewDemo.adminName}</span></div>
+                <div className="sa-info-row"><span className="sa-info-key">Email</span><span className="sa-info-val">{viewDemo.email}</span></div>
+                <div className="sa-info-row"><span className="sa-info-key">Phone</span><span className="sa-info-val">{viewDemo.mobile}</span></div>
+                {viewDemo.city && <div className="sa-info-row"><span className="sa-info-key">City</span><span className="sa-info-val">{viewDemo.city}</span></div>}
+                <div className="sa-info-row"><span className="sa-info-key">Preferred Date</span><span className="sa-info-val">{formatDemoDate(viewDemo.preferredDate)}</span></div>
+                <div className="sa-info-row"><span className="sa-info-key">Preferred Time</span><span className="sa-info-val">{formatDemoTime(viewDemo.preferredTime) || "—"}</span></div>
+                <div className="sa-info-row"><span className="sa-info-key">Submitted</span><span className="sa-info-val">{formatDemoDate(viewDemo.createdAt)}</span></div>
+                <div className="sa-info-row"><span className="sa-info-key">Status</span><span className="sa-info-val">{viewDemo.status.charAt(0) + viewDemo.status.slice(1).toLowerCase()}</span></div>
+              </div>
+              {viewDemo.message && (
+                <div className="sa-field">
+                  <label className="sa-label">Message</label>
+                  <div style={{ fontSize: 13, color: "#334155", lineHeight: 1.6, background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 10, padding: "12px 14px" }}>{viewDemo.message}</div>
+                </div>
+              )}
+            </div>
+            <div className="sa-modal-footer">
+              <a className="sa-btn sa-btn-md sa-btn-ghost" style={{ flex: 1 }} href={`mailto:${viewDemo.email}`}><Mail size={15} /> Email</a>
+              <a className="sa-btn sa-btn-md sa-btn-primary" style={{ flex: 1 }} href={`tel:${viewDemo.mobile}`}><Phone size={15} /> Call</a>
+            </div>
+          </div>
+        </div>
       )}
 
       <SupportModal open={supportOpen} onClose={() => setSupportOpen(false)} />

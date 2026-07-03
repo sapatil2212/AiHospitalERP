@@ -1766,6 +1766,38 @@ enum EnquiryStatus {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// DEMO REQUESTS (Platform-level B2B leads from the marketing "Contact / Book a Demo" page)
+// Not hospital-scoped — surfaced to the SUPER_ADMIN dashboard.
+// ─────────────────────────────────────────────────────────────────────────────
+
+model DemoRequest {
+  id            String            @id @default(uuid())
+  hospitalName  String
+  adminName     String
+  email         String
+  mobile        String
+  city          String?
+  preferredDate DateTime?         @db.Date
+  preferredTime String?
+  message       String?           @db.Text
+  status        DemoRequestStatus @default(NEW)
+  notes         String?           @db.Text
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+enum DemoRequestStatus {
+  NEW
+  CONTACTED
+  SCHEDULED
+  CONVERTED
+  CLOSED
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // BLOG MANAGEMENT
 // ─────────────────────────────────────────────────────────────────────────────
 

@@ -42,8 +42,8 @@ Key Features:
 === GETTING STARTED ===
 - Register your hospital at /signup
 - Sign in to your dashboard at /login
-- Contact support: support@aihospitalerp.com
-- Phone: +91 90590 53938
+- Contact support: aihospitalerp@gmail.com
+- Phone: +91 9168 08 1355
 
 === PRICING TIERS ===
 - **Starter** — For small clinics, up to 5 doctors
@@ -54,7 +54,7 @@ Key Features:
 === RESPONSE GUIDELINES ===
 - Be professional, helpful, and concise (2–4 sentences typically)
 - Use bullet points when listing features or steps
-- For billing/pricing questions, direct to sales at support@aihospitalerp.com
+- For billing/pricing questions, direct to sales at aihospitalerp@gmail.com
 - For platform issues, suggest checking the dashboard or contacting support
 - Never share or ask for passwords or sensitive credentials
 - If asked something unrelated to the platform or healthcare management, politely redirect
@@ -149,12 +149,12 @@ export async function POST(req: Request) {
 
     // 3. All failed
     return NextResponse.json({
-      text: "I'm having trouble connecting to AI services right now. Please call us at **+91 90590 53938** or visit /contact.",
+      text: "I'm having trouble connecting to AI services right now. Please call us at **+91 9168 08 1355** or visit /contact.",
     });
   } catch (error: any) {
     console.error("Chat API Error:", error);
     return NextResponse.json(
-      { text: "Something went wrong. Please call us at **+91 90590 53938**." },
+      { text: "Something went wrong. Please call us at **+91 9168 08 1355**." },
       { status: 500 }
     );
   }

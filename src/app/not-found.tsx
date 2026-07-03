@@ -6,10 +6,8 @@ import { Home, ArrowLeft, Search, Heart } from "lucide-react";
 
 const SUGGESTIONS = [
   { label: "Home", href: "/" },
-  { label: "Book Appointment", href: "/#services" },
-  { label: "Our Doctors", href: "/doctors" },
-  { label: "Treatments", href: "/treatments" },
   { label: "About Us", href: "/about" },
+  { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
 ];
 

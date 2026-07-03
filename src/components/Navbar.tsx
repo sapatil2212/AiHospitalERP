@@ -29,10 +29,9 @@ const treatmentsRight = [
   { label: "Dental and Medical Tourism", href: "/treatments/medical-tourism", icon: <Plane size={18} /> },
 ];
 
-const navLinks = [
+const navLinks: { label: string; href: string; hasDropdown?: boolean }[] = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about" },
-  { label: "Treatments", href: "/treatments", hasDropdown: true },
   { label: "Blog", href: "/blog" },
   { label: "Contact Us", href: "/contact" },
 ];
@@ -81,7 +80,7 @@ export default function Navbar() {
           <div className={styles.topBarLeft}>
             <span className={styles.topBarItem}>
               <Phone size={14} />
-              <span>+91 90590 53938</span>
+              <span>+91 9168 08 1355</span>
             </span>
             <span className={styles.topBarDivider}>|</span>
             <span className={styles.topBarItem}>
@@ -241,11 +240,11 @@ export default function Navbar() {
           {/* CTA */}
           <div className={styles.navActions}>
             <a
-              href="tel:+919059053938"
+              href="tel:+919168081355"
               className={`${styles.navBtn} ${styles.navContact}`}
             >
               <PhoneCall size={15} />
-              +91 90590 53938
+              +91 9168 08 1355
             </a>
             <button
               onClick={openAppointment}
@@ -340,12 +339,12 @@ export default function Navbar() {
               )}
               <div className={styles.mobileActions}>
                 <a
-                  href="tel:+919059053938"
+                  href="tel:+919168081355"
                   className={`${styles.navBtn} ${styles.navContact} ${styles.mobileCta}`}
                   onClick={() => setIsMobileOpen(false)}
                 >
                   <PhoneCall size={14} />
-                  +91 90590 53938
+                  +91 9168 08 1355
                 </a>
                 <button
                   className={`${styles.navBtn} ${styles.navCta} ${styles.mobileCta}`}

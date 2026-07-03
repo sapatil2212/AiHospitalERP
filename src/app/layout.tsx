@@ -1,8 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { AppointmentProvider } from "@/components/AppointmentProvider";
-import MobileAppointment from "@/components/mobile-appointment";
-import WhatsAppWidget from "@/components/whatsapp-widget";
-import AIChatbot from "@/components/ai-chatbot";
 import Preloader from "@/components/Preloader";
 import "./globals.css";
 
@@ -50,9 +47,6 @@ export default function RootLayout({
         <Preloader />
         <AppointmentProvider>
           {children}
-          <WhatsAppWidget />
-          <AIChatbot />
-          <MobileAppointment />
         </AppointmentProvider>
       </body>
     </html>

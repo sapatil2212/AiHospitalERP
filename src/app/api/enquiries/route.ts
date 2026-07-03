@@ -6,8 +6,8 @@ import { randomUUID } from "crypto";
 import { sendEnquiryConfirmation, sendEnquiryNotificationToHospital } from "../../../../backend/utils/mailer";
 
 const HOSPITAL_NAME = process.env.HOSPITAL_NAME || "AiHospitalERP";
-const HOSPITAL_EMAIL = process.env.HOSPITAL_EMAIL || "info@aihospitalerp.com";
-const HOSPITAL_PHONE = process.env.HOSPITAL_PHONE || "+91 90590 53938";
+const HOSPITAL_EMAIL = process.env.HOSPITAL_EMAIL || "aihospitalerp@gmail.com";
+const HOSPITAL_PHONE = process.env.HOSPITAL_PHONE || "+91 9168 08 1355";
 
 /**
  * Push enquiry data to Google Sheet via Apps Script webhook.

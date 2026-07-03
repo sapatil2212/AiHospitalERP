@@ -1,23 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import {
-  MapPin,
-  Phone,
-  Mail,
-  ArrowRight,
-  Facebook,
-  Twitter,
-  Instagram,
-  Linkedin,
-} from "lucide-react";
-import { usePathname } from "next/navigation";
+import { MapPin, Phone, Mail, ArrowRight } from "lucide-react";
 import styles from "./Footer.module.css";
 
 const companyLinks = [
-  { label: "Company", href: "/about" },
-  { label: "Pricing", href: "/#pricing" },
-  { label: "Contact", href: "/contact" },
+  { label: "Privacy Policy", href: "/privacy-policy" },
+  { label: "Terms & Conditions", href: "/terms-of-service" },
+  { label: "Refund & Cancellation Policy", href: "/refund-policy" },
+  { label: "Shipping & Delivery Policy", href: "/shipping-delivery-policy" },
+  { label: "Contact Us", href: "/contact" },
+  { label: "About Us", href: "/about" },
+  { label: "Cookie Policy", href: "/cookie-policy" },
+  { label: "Security Policy", href: "/security-policy" },
 ];
 
 const featureLinks = [
@@ -29,52 +24,20 @@ const featureLinks = [
   { label: "Multi-Clinic Support", href: "/#features" },
 ];
 
-const legalLinks = [
-  { label: "Privacy Policy", href: "/privacy-policy" },
-  { label: "Terms", href: "/terms-of-service" },
-  { label: "Refund Policy", href: "/refund-policy" },
-];
-
-const quickLinks = [
-  { label: "Contact Us", href: "/contact" },
-];
-
-const socialLinks = [
-  { icon: <Facebook size={18} />, label: "Facebook", href: "#" },
-  { icon: <Twitter size={18} />, label: "Twitter", href: "#" },
-  { icon: <Instagram size={18} />, label: "Instagram", href: "#" },
-  { icon: <Linkedin size={18} />, label: "LinkedIn", href: "#" },
-];
-
 export default function Footer() {
-  const pathname = usePathname();
-  const isHomePage = pathname === "/";
-
   return (
     <footer id="contact" className={styles.footer}>
       {/* Footer Content */}
-      <div className={`container ${styles.footerContent} ${!isHomePage ? styles.footerNoNewsletter : ""}`}>
-        {/* About Column */}
+      <div className={`container ${styles.footerContent} ${styles.footerNoNewsletter}`}>
+        {/* Brand Column */}
         <div className={styles.footerCol}>
           <Link href="/" className={styles.footerLogo} style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
-            <img src="/logo/aihospitalerp-logo.png" alt="AiHospitalERP" style={{ height: 40, width: "auto", objectFit: "contain" }} />
+            <img src="/logo/aihospitalerp-logo.png" alt="PrimeInbox" style={{ height: 40, width: "auto", objectFit: "contain" }} />
           </Link>
-          <h5 className={styles.footerTagline}>Smarter Healthcare Platform</h5>
           <p className={styles.footerAbout}>
-            Our comprehensive clinic management platform with revenue tracking capabilities for healthcare operations.
+            Smarter healthcare connecting doctors and patients. The multi-tenant HMS SaaS platform
+            for modern healthcare providers.
           </p>
-          <div className={styles.socialLinks}>
-            {socialLinks.map((social) => (
-              <a
-                key={social.label}
-                href={social.href}
-                className={styles.socialLink}
-                aria-label={social.label}
-              >
-                {social.icon}
-              </a>
-            ))}
-          </div>
         </div>
 
         {/* Company Links */}
@@ -107,48 +70,18 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Legal Links */}
-        <div className={styles.footerCol}>
-          <h4 className={styles.colTitle}>Legal</h4>
-          <ul className={styles.linkList}>
-            {legalLinks.map((link) => (
-              <li key={link.label}>
-                <Link href={link.href} className={styles.footerLink}>
-                  <ArrowRight size={14} />
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Contact Us */}
-        <div className={styles.footerCol}>
-          <h4 className={styles.colTitle}>Contact Us</h4>
-          <ul className={styles.linkList}>
-            {quickLinks.map((link) => (
-              <li key={link.label}>
-                <Link href={link.href} className={styles.footerLink}>
-                  <ArrowRight size={14} />
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
         {/* Contact Info */}
         <div className={styles.footerCol}>
-          <h4 className={styles.colTitle}>Get In Touch</h4>
+          <h4 className={styles.colTitle}>Contact</h4>
           <div className={styles.contactList}>
-            <div className={styles.contactItem}>
-              <Mail size={18} className={styles.contactIcon} />
-              <span>bookmytime1355@gmail.com</span>
-            </div>
-            <div className={styles.contactItem}>
+            <a href="tel:+919168081355" className={styles.contactItem} style={{ textDecoration: "none", color: "inherit" }}>
               <Phone size={18} className={styles.contactIcon} />
               <span>+91 9168 08 1355</span>
-            </div>
+            </a>
+            <a href="mailto:aihospitalerp@gmail.com" className={styles.contactItem} style={{ textDecoration: "none", color: "inherit" }}>
+              <Mail size={18} className={styles.contactIcon} />
+              <span>aihospitalerp@gmail.com</span>
+            </a>
             <div className={styles.contactItem}>
               <MapPin size={18} className={styles.contactIcon} />
               <span>Pune, Maharashtra, India</span>
@@ -161,7 +94,7 @@ export default function Footer() {
       <div className={styles.bottomBar}>
         <div className={`container ${styles.bottomInner}`} style={{ justifyContent: "center" }}>
           <p className={styles.copyright} style={{ textAlign: "center" }}>
-            © {new Date().getFullYear()} BookMyTime Systems Inc. All rights reserved. | A product of <a href="https://brightwavedigital.com/" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>Brightwave Digital Products</a>
+            Copyright © {new Date().getFullYear()} PrimeInbox All rights reserved. | A product of <a href="https://brightwavedigital.com/" target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "underline" }}>Brightwave Digital Products</a>
           </p>
         </div>
       </div>

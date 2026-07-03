@@ -265,14 +265,13 @@ export default function CookiePolicyPage() {
                 </p>
                 <ul className={styles.list}>
                   <li className={styles.listItem}><strong>Email:</strong>{" "}
-                    <a href="mailto:info@aihospitalerp.com" className={styles.contactLink}>
-                      info@aihospitalerp.com
+                    <a href="mailto:aihospitalerp@gmail.com" className={styles.contactLink}>
+                      aihospitalerp@gmail.com
                     </a>
                   </li>
-                  <li className={styles.listItem}><strong>Phone:</strong> +91 90590 53938</li>
+                  <li className={styles.listItem}><strong>Phone:</strong> +91 9168 08 1355</li>
                   <li className={styles.listItem}>
-                    <strong>Address:</strong> 3/Alampat Business Centre, Near Cycle Circle,
-                    Krushi Nagar, College Road, Nashik 422001
+                    <strong>Address:</strong> Pune, Maharashtra, India
                   </li>
                 </ul>
                 <p className={styles.sectionText}>

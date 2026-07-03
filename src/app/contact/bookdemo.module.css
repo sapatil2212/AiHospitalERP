@@ -1,0 +1,261 @@
+/* ========================================
+   Book a Demo Page — modern split layout
+   ======================================== */
+
+.page {
+  min-height: 100vh;
+  background:
+    radial-gradient(1000px 500px at 85% -10%, rgba(124, 58, 237, 0.10), transparent 60%),
+    radial-gradient(800px 500px at 0% 110%, rgba(14, 165, 233, 0.08), transparent 55%),
+    #f7f7fb;
+  padding: calc(var(--space-16, 64px) + 24px) 0 var(--space-16, 64px);
+}
+
+.wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Top intro */
+.intro {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 40px;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 100px;
+  background: rgba(124, 58, 237, 0.09);
+  color: #7c3aed;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+.title {
+  font-size: clamp(30px, 5vw, 46px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #0f172a;
+  line-height: 1.1;
+  margin-bottom: 14px;
+}
+.title span { color: #7c3aed; }
+.subtitle {
+  font-size: 17px;
+  color: #475569;
+  line-height: 1.65;
+}
+
+/* Card split */
+.card {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  background: #ffffff;
+  border: 1px solid #ece9f6;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px -40px rgba(76, 29, 149, 0.35);
+}
+
+/* Left brand panel */
+.aside {
+  position: relative;
+  padding: 40px 36px;
+  color: #fff;
+  background: linear-gradient(160deg, #7c3aed 0%, #6d28d9 55%, #4c1d95 100%);
+  overflow: hidden;
+}
+.aside::before {
+  content: "";
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 260px; height: 260px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.16), transparent 70%);
+  border-radius: 50%;
+}
+.aside::after {
+  content: "";
+  position: absolute;
+  bottom: -100px; left: -60px;
+  width: 240px; height: 240px;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.25), transparent 70%);
+  border-radius: 50%;
+}
+.asideInner { position: relative; z-index: 1; display: flex; flex-direction: column; height: 100%; }
+.asideKicker {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #ddd6fe;
+  margin-bottom: 12px;
+}
+.asideTitle {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+.asideText {
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.82);
+  margin-bottom: 28px;
+}
+.benefits { display: flex; flex-direction: column; gap: 16px; margin-bottom: 28px; }
+.benefit { display: flex; align-items: flex-start; gap: 12px; }
+.benefitIcon {
+  width: 28px; height: 28px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.14);
+  display: flex; align-items: center; justify-content: center;
+}
+.benefitText { font-size: 14px; line-height: 1.5; color: rgba(255, 255, 255, 0.92); }
+
+.asideDivider { height: 1px; background: rgba(255, 255, 255, 0.14); margin: 6px 0 22px; }
+
+.stats { display: flex; gap: 26px; margin-top: auto; }
+.statNum { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; }
+.statLabel { font-size: 11.5px; color: rgba(255, 255, 255, 0.7); margin-top: 2px; }
+
+/* Right form panel */
+.formPanel { padding: 40px 40px 44px; }
+.formHeading { font-size: 20px; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; margin-bottom: 4px; }
+.formSub { font-size: 13.5px; color: #64748b; margin-bottom: 24px; }
+
+.form { display: flex; flex-direction: column; gap: 16px; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.label { font-size: 12.5px; font-weight: 600; color: #334155; }
+.req { color: #dc2626; }
+
+.inputWrap { position: relative; display: flex; align-items: center; }
+.inputIcon {
+  position: absolute; left: 13px;
+  color: #94a3b8; display: flex; pointer-events: none;
+}
+.input,
+.select,
+.textarea {
+  width: 100%;
+  font-size: 14px;
+  font-family: inherit;
+  color: #0f172a;
+  background: #f8fafc;
+  border: 1.5px solid #e6e8ee;
+  border-radius: 11px;
+  outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+}
+.input, .select { height: 46px; padding: 0 14px 0 40px; }
+.select { padding-right: 34px; cursor: pointer; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center;
+}
+.textarea { padding: 12px 14px; min-height: 96px; resize: vertical; line-height: 1.6; }
+.input::placeholder, .textarea::placeholder { color: #9aa4b2; }
+.input:focus, .select:focus, .textarea:focus {
+  border-color: #7c3aed;
+  background: #fff;
+  box-shadow: 0 0 0 3.5px rgba(124, 58, 237, 0.12);
+}
+.input:focus + .inputIcon { color: #7c3aed; }
+
+.alertError {
+  padding: 11px 14px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  font-size: 13px;
+  color: #b91c1c;
+}
+
+.submitBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  height: 50px;
+  margin-top: 4px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 12px 26px -10px rgba(124, 58, 237, 0.6);
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+}
+.submitBtn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 18px 34px -12px rgba(124, 58, 237, 0.7); }
+.submitBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.consent { font-size: 12px; color: #94a3b8; text-align: center; margin-top: 2px; line-height: 1.5; }
+.consent a { color: #7c3aed; text-decoration: none; font-weight: 600; }
+.consent a:hover { text-decoration: underline; }
+
+.spin { animation: bd-spin 0.7s linear infinite; }
+@keyframes bd-spin { to { transform: rotate(360deg); } }
+
+/* Success modal */
+.modalOverlay {
+  position: fixed; inset: 0; z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(6px);
+  padding: 20px;
+}
+.modalCard {
+  background: #fff;
+  border-radius: 22px;
+  padding: 40px 36px 32px;
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.22);
+}
+.tickCircle { width: 82px; height: 82px; margin: 0 auto 20px; }
+.tickSvg { width: 82px; height: 82px; }
+.tickCircleBg {
+  stroke: #7c3aed; stroke-width: 2;
+  stroke-dasharray: 166; stroke-dashoffset: 166;
+  stroke-linecap: round;
+  animation: bd-circle 0.6s ease-in-out forwards;
+}
+.tickCheck {
+  stroke: #7c3aed; stroke-width: 3;
+  stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: 48; stroke-dashoffset: 48;
+  animation: bd-check 0.4s 0.45s ease-in-out forwards;
+}
+@keyframes bd-circle { to { stroke-dashoffset: 0; } }
+@keyframes bd-check { to { stroke-dashoffset: 0; } }
+.modalTitle { font-size: 21px; font-weight: 800; color: #0f172a; margin-bottom: 8px; }
+.modalText { font-size: 14px; color: #64748b; line-height: 1.6; margin-bottom: 24px; }
+.modalBtn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 11px 34px; border-radius: 11px; border: none;
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.modalBtn:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(124, 58, 237, 0.4); }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .card { grid-template-columns: 1fr; }
+  .aside { padding: 32px 28px; }
+  .stats { margin-top: 24px; }
+  .formPanel { padding: 30px 24px 34px; }
+}
+@media (max-width: 540px) {
+  .row { grid-template-columns: 1fr; }
+  .title { font-size: 30px; }
+}

@@ -593,7 +593,7 @@ export default function AiHospitalERPLanding() {
         /* FOOTER */
         .mn-footer { background: ${DARK}; padding: 72px 5% 32px; }
         .mn-footer-inner { max-width: 1200px; margin: 0 auto; }
-        .mn-footer-top { display: grid; grid-template-columns: 1.6fr 1.2fr 1fr 1.3fr; gap: 40px; margin-bottom: 56px; }
+        .mn-footer-top { display: grid; grid-template-columns: 1.6fr 1.4fr 1fr 1fr; gap: 40px; margin-bottom: 56px; }
         @media (max-width: 900px) { .mn-footer-top { grid-template-columns: 1fr 1fr; gap: 32px; } }
         @media (max-width: 500px) { .mn-footer-top { grid-template-columns: 1fr; } }
         .mn-footer-brand .mn-logo-text { color: #fff; }
@@ -2073,6 +2073,20 @@ export default function AiHospitalERPLanding() {
             </div>
 
             <div>
+              <div className="mn-footer-col-title">Company</div>
+              <div className="mn-footer-links">
+                <Link href="/privacy-policy">Privacy Policy</Link>
+                <Link href="/terms-of-service">Terms &amp; Conditions</Link>
+                <Link href="/refund-policy">Refund &amp; Cancellation Policy</Link>
+                <Link href="/shipping-delivery-policy">Shipping &amp; Delivery Policy</Link>
+                <Link href="/contact">Contact Us</Link>
+                <Link href="/about">About Us</Link>
+                <Link href="/cookie-policy">Cookie Policy</Link>
+                <Link href="/security-policy">Security Policy</Link>
+              </div>
+            </div>
+
+            <div>
               <div className="mn-footer-col-title">Features</div>
               <div className="mn-footer-links">
                 <a href="#features">Appointment Scheduling</a>
@@ -2085,24 +2099,15 @@ export default function AiHospitalERPLanding() {
             </div>
 
             <div>
-              <div className="mn-footer-col-title">Legal</div>
-              <div className="mn-footer-links">
-                <Link href="/privacy-policy">Privacy Policy</Link>
-                <Link href="/terms-of-service">Terms of Service</Link>
-                <Link href="/refund-policy">Refund Policy</Link>
-              </div>
-            </div>
-
-            <div>
-              <div className="mn-footer-col-title">Get In Touch</div>
+              <div className="mn-footer-col-title">Contact</div>
               <div className="mn-footer-contact">
-                <a href="mailto:bookmytime1355@gmail.com">
-                  <Mail size={15} />
-                  <span>bookmytime1355@gmail.com</span>
-                </a>
                 <a href="tel:+919168081355">
                   <Phone size={15} />
                   <span>+91 9168 08 1355</span>
+                </a>
+                <a href="mailto:aihospitalerp@gmail.com">
+                  <Mail size={15} />
+                  <span>aihospitalerp@gmail.com</span>
                 </a>
                 <div className="mn-footer-contact-item">
                   <MapPin size={15} />
@@ -2115,7 +2120,7 @@ export default function AiHospitalERPLanding() {
           <div className="mn-footer-divider" />
 
           <div className="mn-footer-bottom">
-            <p className="mn-footer-copy">© {new Date().getFullYear()} BookMyTime Systems Inc. All rights reserved. | A product of <a href="https://brightwavedigital.com/" target="_blank" rel="noopener noreferrer" style={{ color: '#A78BFA', textDecoration: 'none', fontWeight: 600 }}>Brightwave Digital Products</a></p>
+            <p className="mn-footer-copy">Copyright © {new Date().getFullYear()} PrimeInbox All rights reserved. | A product of <a href="https://brightwavedigital.com/" target="_blank" rel="noopener noreferrer" style={{ color: '#A78BFA', textDecoration: 'none', fontWeight: 600 }}>Brightwave Digital Products</a></p>
           </div>
         </div>
       </footer>

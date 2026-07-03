@@ -145,7 +145,7 @@ export default function PlansPage() {
                 ) : (
                   <button
                     className="pl-cta primary"
-                    onClick={() => window.open("mailto:support@aihospitalerp.com?subject=Plan Change Request", "_blank")}
+                    onClick={() => window.open("mailto:aihospitalerp@gmail.com?subject=Plan Change Request", "_blank")}
                   >
                     Switch to {plan.name}
                   </button>
@@ -161,8 +161,8 @@ export default function PlansPage() {
             <div className="pl-support-sub">Our team will help you switch plans without any downtime.</div>
           </div>
           <div className="pl-support-links">
-            <a href="mailto:support@aihospitalerp.com" className="pl-support-link"><Mail size={14} /> support@aihospitalerp.com</a>
-            <a href="tel:+919876543210" className="pl-support-link"><Phone size={14} /> +91-9876543210</a>
+            <a href="mailto:aihospitalerp@gmail.com" className="pl-support-link"><Mail size={14} /> aihospitalerp@gmail.com</a>
+            <a href="tel:+919168081355" className="pl-support-link"><Phone size={14} /> +91 9168 08 1355</a>
           </div>
         </div>
       </div>

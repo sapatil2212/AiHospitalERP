@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    const SUPER_ADMIN_EMAIL = process.env.SUPER_ADMIN_EMAIL || "dreampropertiesnashik@gmail.com";
+    const SUPER_ADMIN_EMAIL = process.env.SUPER_ADMIN_EMAIL || "aihospitalerp@gmail.com";
     const emailUsername = (process.env.EMAIL_USERNAME || "").trim();
     const emailPassword = (process.env.EMAIL_PASSWORD || "").replace(/\s/g, "");
 
