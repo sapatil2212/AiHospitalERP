@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import SaasNavbar from "@/components/SaasNavbar";
+import SaasFooter from "@/components/SaasFooter";
 import { RefreshCcw, Calendar } from "lucide-react";
 import styles from "../policy.module.css";
 
@@ -13,10 +13,10 @@ export const metadata: Metadata = {
 export default function RefundPolicyPage() {
   return (
     <>
-      <Navbar />
+      <SaasNavbar />
       <main className={styles.page}>
         {/* Hero */}
-        <section className={styles.hero}>
+        <section className={styles.hero} style={{ paddingTop: "120px" }}>
           <div className="container">
             <div className={styles.heroInner}>
               <div className={styles.heroBadge}>
@@ -164,7 +164,7 @@ export default function RefundPolicyPage() {
           </div>
         </section>
       </main>
-      <Footer />
+      <SaasFooter />
     </>
   );
 }
