@@ -1,3 +1,4 @@
+import { requirePlanFeature } from "../../../../../backend/middlewares/plan-gate.middleware";
 import { NextRequest } from "next/server";
 import { requireRole } from "../../../../../backend/middlewares/role.middleware";
 import { successResponse, errorResponse } from "../../../../../backend/utils/response";
@@ -11,6 +12,8 @@ import { findDepartmentByUserId } from "../../../../../backend/repositories/depa
 export async function GET(req: NextRequest) {
   const auth = await requireRole(req, ["DEPT_HEAD"]);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "PARENT_DEPARTMENT_DASHBOARDS", auth.user.role);
+  if (planError) return planError;
 
   try {
     const dept = await findDepartmentByUserId(auth.user.userId);
@@ -38,6 +41,8 @@ export async function GET(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   const auth = await requireRole(req, ["DEPT_HEAD"]);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "PARENT_DEPARTMENT_DASHBOARDS", auth.user.role);
+  if (planError) return planError;
 
   try {
     const dept = await findDepartmentByUserId(auth.user.userId);
@@ -71,6 +76,8 @@ export async function PUT(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   const auth = await requireRole(req, ["DEPT_HEAD"]);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "PARENT_DEPARTMENT_DASHBOARDS", auth.user.role);
+  if (planError) return planError;
 
   try {
     const dept = await findDepartmentByUserId(auth.user.userId);

@@ -1,3 +1,4 @@
+import { requirePlanFeature } from "../../../../../../../backend/middlewares/plan-gate.middleware";
 import { NextRequest } from "next/server";
 import { requireRole } from "../../../../../../../backend/middlewares/role.middleware";
 import { successResponse, errorResponse } from "../../../../../../../backend/utils/response";
@@ -17,6 +18,8 @@ export async function GET(
 ) {
   const auth = await requireRole(req, ["DEPT_HEAD"]);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "PARENT_DEPARTMENT_DASHBOARDS", auth.user.role);
+  if (planError) return planError;
 
   try {
     const { id: subDeptId } = await params;

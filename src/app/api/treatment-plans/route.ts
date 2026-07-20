@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { treatmentService } from "../../../../backend/services/treatment.service";
 import { createTreatmentPlanSchema, queryTreatmentPlanSchema } from "../../../../backend/validations/treatment.validation";
 import { withAuth, checkPermission, createPermissionError, createUnauthorizedError } from "../../../../backend/middlewares/permission.middleware";
+import { requirePlanFeature } from "../../../../backend/middlewares/plan-gate.middleware";
 
 export async function GET(req: NextRequest) {
   try {
@@ -9,6 +10,9 @@ export async function GET(req: NextRequest) {
     if (!authReq.user) {
       return createUnauthorizedError();
     }
+
+    const planError = await requirePlanFeature(authReq.user!.hospitalId, "TREATMENT_PLANS", authReq.user!.role);
+    if (planError) return planError;
 
     if (!checkPermission(authReq, "PATIENT_VIEW")) {
       return createPermissionError("PATIENT_VIEW");
@@ -48,6 +52,9 @@ export async function POST(req: NextRequest) {
     if (!authReq.user) {
       return createUnauthorizedError();
     }
+
+    const planError = await requirePlanFeature(authReq.user!.hospitalId, "TREATMENT_PLANS", authReq.user!.role);
+    if (planError) return planError;
 
     if (!checkPermission(authReq, "PROCEDURE_PERFORM")) {
       return createPermissionError("PROCEDURE_PERFORM");

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { withAuth, checkPermission, createPermissionError, createUnauthorizedError } from "../../../../../backend/middlewares/permission.middleware";
+import { requirePlanFeature } from "../../../../../backend/middlewares/plan-gate.middleware";
 import prisma from "../../../../../backend/config/db";
 
 export const dynamic = "force-dynamic";
@@ -9,6 +10,8 @@ const px = prisma as any;
 export async function GET(req: NextRequest) {
   const authReq = withAuth(req);
   if (!authReq.user) return createUnauthorizedError();
+  const planError = await requirePlanFeature(authReq.user.hospitalId, "TREATMENT_PLANS", authReq.user.role);
+  if (planError) return planError;
   if (!checkPermission(authReq, "REPORTS_VIEW")) return createPermissionError("REPORTS_VIEW");
 
   const { hospitalId } = authReq.user;

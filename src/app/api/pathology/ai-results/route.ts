@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { requireRole } from "../../../../../backend/middlewares/role.middleware";
+import { requirePlanFeature } from "../../../../../backend/middlewares/plan-gate.middleware";
 import { successResponse, errorResponse } from "../../../../../backend/utils/response";
 import { getAiLabResults } from "../../../../../backend/services/ai.service";
 
@@ -9,6 +10,8 @@ export const dynamic = "force-dynamic";
 export async function POST(req: NextRequest) {
   const auth = await requireRole(req, ["SUB_DEPT_HEAD", "HOSPITAL_ADMIN", "STAFF", "DOCTOR"]);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "LAB_PATHOLOGY", auth.user.role);
+  if (planError) return planError;
   try {
     const body = await req.json();
     const { tests, patientAge, patientGender, clinicalNotes, diagnosis, specimenType } = body;

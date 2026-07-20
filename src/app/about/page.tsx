@@ -40,7 +40,7 @@ const values = [
 const missionPoints = [
   "One platform for OPD, IPD, billing, pharmacy, and analytics",
   "AI that assists clinicians instead of adding busywork",
-  "Enterprise-grade security with HIPAA-aligned practices",
+  "Enterprise-grade security with role-based access controls",
   "Fast onboarding with a 14-day free trial, no credit card",
 ];
 
@@ -68,6 +68,7 @@ export default function AboutPage() {
               and patients. We help healthcare providers run appointments, records, billing, pharmacy,
               and analytics from one secure, intelligent system.
             </p>
+            <span style={{ display: "block", marginTop: 16, fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "#94a3b8" }}>A product of Brightwave Digital Products LLP.</span>
           </motion.section>
 
           {/* Stats */}

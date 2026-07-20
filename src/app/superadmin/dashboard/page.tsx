@@ -440,7 +440,7 @@ export default function SuperAdminDashboard() {
   useEffect(() => {
     if (loading) return;
     const es = new EventSource("/api/notifications/stream");
-    es.onmessage = (e) => { try { const d = JSON.parse(e.data); if (d.unread !== undefined) setUnreadCount(d.unread); } catch {} };
+    es.onmessage = (e) => { try { const d = JSON.parse(e.data); if (d.unread !== undefined) setUnreadCount(d.unread); } catch { } };
     es.onerror = () => es.close();
     return () => es.close();
   }, [loading]);
@@ -484,7 +484,7 @@ export default function SuperAdminDashboard() {
     setPayModal(h); setPayAmount(""); setPayNotes(""); setPayMsg("");
     setPayPlan(h.subscriptionPlan || "STARTER"); setPayCycle(h.billingCycle || "MONTHLY");
     setActionMenu(null); setPayHistoryLoading(true);
-    try { const res = await fetch(`/api/superadmin/hospitals/${h.id}/subscription`, { credentials: "include" }); const data = await res.json(); if (data.success) setPayHistory(data.data || []); } catch {}
+    try { const res = await fetch(`/api/superadmin/hospitals/${h.id}/subscription`, { credentials: "include" }); const data = await res.json(); if (data.success) setPayHistory(data.data || []); } catch { }
     finally { setPayHistoryLoading(false); }
   };
 
@@ -601,14 +601,14 @@ export default function SuperAdminDashboard() {
                     <label className="sa-label">Mobile</label>
                     <input type="text" className="sa-input" value={editForm.mobile} onChange={e => setEditForm(n => ({ ...n, mobile: e.target.value }))} required />
                   </div>
-                  
+
                   <div className="sa-field" style={{ gridColumn: "1/-1", display: "flex", alignItems: "center", gap: 8, margin: "10px 0" }}>
                     <input type="checkbox" id="edit-verified" checked={editForm.isVerified} onChange={e => setEditForm(n => ({ ...n, isVerified: e.target.checked }))} style={{ cursor: "pointer" }} />
                     <label htmlFor="edit-verified" className="sa-label" style={{ margin: 0, cursor: "pointer" }}>Is Verified / Account Enabled</label>
                   </div>
 
                   <div className="sa-dropdown-divider" style={{ gridColumn: "1/-1", margin: "12px 0" }} />
-                  
+
                   <div className="sa-field">
                     <label className="sa-label">Subscription Status</label>
                     <select className="sa-select" value={editForm.subscriptionStatus} onChange={e => setEditForm(n => ({ ...n, subscriptionStatus: e.target.value }))}>
@@ -1070,19 +1070,19 @@ export default function SuperAdminDashboard() {
                                   <div style={{ display: "flex", gap: 6, justifyContent: "flex-end" }}>
                                     <button className="sa-action-btn" onClick={() => setViewHospital(h)} title="View details"><Eye size={15} color="#64748b" /></button>
                                     <button className="sa-action-btn" title="More actions" onClick={(e) => {
-                                        const r = e.currentTarget.getBoundingClientRect();
-                                        const spaceAbove = r.top;
-                                        const useDropdownBelow = spaceAbove < 320;
-                                        setMenuPos(useDropdownBelow ? {
-                                          top: r.bottom + 6,
-                                          right: window.innerWidth - r.right,
-                                          isBelow: true
-                                        } : {
-                                          bottom: window.innerHeight - r.top + 6,
-                                          right: window.innerWidth - r.right,
-                                          isBelow: false
-                                        });
-                                        setActionMenu(actionMenu === h.id ? null : h.id);
+                                      const r = e.currentTarget.getBoundingClientRect();
+                                      const spaceAbove = r.top;
+                                      const useDropdownBelow = spaceAbove < 320;
+                                      setMenuPos(useDropdownBelow ? {
+                                        top: r.bottom + 6,
+                                        right: window.innerWidth - r.right,
+                                        isBelow: true
+                                      } : {
+                                        bottom: window.innerHeight - r.top + 6,
+                                        right: window.innerWidth - r.right,
+                                        isBelow: false
+                                      });
+                                      setActionMenu(actionMenu === h.id ? null : h.id);
                                     }}><MoreVertical size={15} color="#64748b" /></button>
                                   </div>
                                 </td>
@@ -1136,19 +1136,19 @@ export default function SuperAdminDashboard() {
                                   <div style={{ display: "flex", gap: 6, justifyContent: "flex-end" }}>
                                     <button className="sa-action-btn" onClick={() => setViewHospital(h)}><Eye size={15} color="#64748b" /></button>
                                     <button className="sa-action-btn" title="More actions" onClick={(e) => {
-                                        const r = e.currentTarget.getBoundingClientRect();
-                                        const spaceAbove = r.top;
-                                        const useDropdownBelow = spaceAbove < 320;
-                                        setMenuPos(useDropdownBelow ? {
-                                          top: r.bottom + 6,
-                                          right: window.innerWidth - r.right,
-                                          isBelow: true
-                                        } : {
-                                          bottom: window.innerHeight - r.top + 6,
-                                          right: window.innerWidth - r.right,
-                                          isBelow: false
-                                        });
-                                        setActionMenu(actionMenu === h.id ? null : h.id);
+                                      const r = e.currentTarget.getBoundingClientRect();
+                                      const spaceAbove = r.top;
+                                      const useDropdownBelow = spaceAbove < 320;
+                                      setMenuPos(useDropdownBelow ? {
+                                        top: r.bottom + 6,
+                                        right: window.innerWidth - r.right,
+                                        isBelow: true
+                                      } : {
+                                        bottom: window.innerHeight - r.top + 6,
+                                        right: window.innerWidth - r.right,
+                                        isBelow: false
+                                      });
+                                      setActionMenu(actionMenu === h.id ? null : h.id);
                                     }}><MoreVertical size={15} color="#64748b" /></button>
                                   </div>
                                 </td>

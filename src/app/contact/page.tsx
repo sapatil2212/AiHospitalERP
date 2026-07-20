@@ -93,6 +93,7 @@ export default function BookDemoPage() {
               Book a live, personalized demo with our team. Pick a date and time that suits you,
               and we&apos;ll show you exactly how to run your hospital smarter.
             </p>
+            <span style={{ display: "block", marginTop: 16, fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "#94a3b8" }}>A product of Brightwave Digital Products LLP.</span>
           </motion.div>
 
           {/* Card */}

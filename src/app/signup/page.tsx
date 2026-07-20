@@ -255,8 +255,8 @@ function HospitalSignupPageContent() {
           {/* STEP 1: FORM */}
           {step === "form" && (
             <>
-              <h1 className="mn-sp-title">Register Your Hospital</h1>
-              <p className="mn-sp-sub">Fill in your hospital and admin details. We&apos;ll send a verification OTP to confirm your email.</p>
+              <h1 className="mn-sp-title" style={{ textAlign: "center" }}>Register Your Hospital</h1>
+              <p className="mn-sp-sub" style={{ textAlign: "center" }}>Fill in your hospital and admin details. We&apos;ll send a verification OTP to confirm your email.</p>
 
               <div className="mn-sp-plans">
                 {PLANS.map((p) => (

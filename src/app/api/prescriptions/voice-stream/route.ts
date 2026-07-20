@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { streamTranscription } from "@/../../backend/services/voice-prescription.service";
 import { authMiddleware } from "@/../../backend/middlewares/auth.middleware";
+import { requirePlanFeature } from "@/../../backend/middlewares/plan-gate.middleware";
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,6 +11,8 @@ export async function POST(req: NextRequest) {
     }
 
     const { role } = authResult.user;
+    const planError = await requirePlanFeature(authResult.user.hospitalId || "", "VOICE_PRESCRIPTION", authResult.user.role);
+    if (planError) return planError;
 
     if (role !== "DOCTOR") {
       return NextResponse.json({ success: false, message: "Only doctors can use voice prescription" }, { status: 403 });

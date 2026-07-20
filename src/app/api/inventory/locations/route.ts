@@ -1,3 +1,4 @@
+import { requirePlanFeature } from "../../../../../backend/middlewares/plan-gate.middleware";
 import { NextRequest } from "next/server";
 import { requireHospitalAdmin, requireRole } from "../../../../../backend/middlewares/role.middleware";
 import { successResponse, errorResponse } from "../../../../../backend/utils/response";
@@ -8,6 +9,8 @@ const INV_READ_ROLES = ["HOSPITAL_ADMIN", "FINANCE_HEAD", "SUB_DEPT_HEAD"];
 export async function GET(req: NextRequest) {
   const auth = await requireRole(req, INV_READ_ROLES);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "INVENTORY_MANAGEMENT", auth.user.role);
+  if (planError) return planError;
 
   try {
     const data = await service.getLocations(auth.hospitalId);
@@ -20,6 +23,8 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const auth = await requireHospitalAdmin(req);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "INVENTORY_MANAGEMENT", auth.user.role);
+  if (planError) return planError;
 
   try {
     const body = await req.json();
@@ -35,6 +40,8 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   const auth = await requireHospitalAdmin(req);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "INVENTORY_MANAGEMENT", auth.user.role);
+  if (planError) return planError;
 
   try {
     const body = await req.json();
@@ -50,6 +57,8 @@ export async function PUT(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   const auth = await requireHospitalAdmin(req);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "INVENTORY_MANAGEMENT", auth.user.role);
+  if (planError) return planError;
 
   try {
     const { searchParams } = new URL(req.url);

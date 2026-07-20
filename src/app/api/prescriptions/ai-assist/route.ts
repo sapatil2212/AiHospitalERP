@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { requireRole } from "../../../../../backend/middlewares/role.middleware";
+import { requirePlanFeature } from "../../../../../backend/middlewares/plan-gate.middleware";
 import { successResponse, errorResponse } from "../../../../../backend/utils/response";
 import { getAiPrescriptionSuggestions } from "../../../../../backend/services/ai.service";
 import { aiAssistSchema } from "../../../../../backend/validations/prescription.validation";
@@ -10,6 +11,8 @@ export const dynamic = "force-dynamic";
 export async function POST(req: NextRequest) {
   const auth = await requireRole(req, ["DOCTOR", "HOSPITAL_ADMIN", "SUPER_ADMIN"]);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "AI_PRESCRIPTION", auth.user.role);
+  if (planError) return planError;
   try {
     const body = await req.json();
     console.log("AI Assist Request Body:", JSON.stringify(body, null, 2));

@@ -1,3 +1,4 @@
+import { requirePlanFeature } from "../../../../../backend/middlewares/plan-gate.middleware";
 import { NextRequest } from "next/server";
 import { requireRole } from "../../../../../backend/middlewares/role.middleware";
 import { successResponse, errorResponse } from "../../../../../backend/utils/response";
@@ -6,6 +7,8 @@ import { getDeptProfile, DepartmentServiceError } from "../../../../../backend/s
 export async function GET(req: NextRequest) {
   const auth = await requireRole(req, ["DEPT_HEAD"]);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "PARENT_DEPARTMENT_DASHBOARDS", auth.user.role);
+  if (planError) return planError;
 
   try {
     const dept = await getDeptProfile(auth.user.userId);

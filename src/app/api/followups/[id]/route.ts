@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { requireRole } from "../../../../../backend/middlewares/role.middleware";
+import { requirePlanFeature } from "../../../../../backend/middlewares/plan-gate.middleware";
 import { successResponse, errorResponse } from "../../../../../backend/utils/response";
 import {
   getFollowUpById,
@@ -15,6 +16,8 @@ const ALLOWED_ROLES = ["HOSPITAL_ADMIN", "RECEPTIONIST", "STAFF", "DOCTOR"];
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   const auth = await requireRole(req, ALLOWED_ROLES);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "FOLLOWUP_SYSTEM", auth.user.role);
+  if (planError) return planError;
   try {
     const followUp = await getFollowUpById(params.id, auth.hospitalId);
     return successResponse(followUp, "Follow-up fetched");
@@ -28,6 +31,8 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   const auth = await requireRole(req, ALLOWED_ROLES);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "FOLLOWUP_SYSTEM", auth.user.role);
+  if (planError) return planError;
   try {
     const body = await req.json();
     const result = updateFollowUpSchema.safeParse(body);
@@ -45,6 +50,8 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
   const auth = await requireRole(req, ALLOWED_ROLES);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "FOLLOWUP_SYSTEM", auth.user.role);
+  if (planError) return planError;
   try {
     const result = await deleteFollowUp(params.id, auth.hospitalId);
     return successResponse(result, "Follow-up deleted");

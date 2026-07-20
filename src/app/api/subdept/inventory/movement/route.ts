@@ -1,3 +1,4 @@
+import { requirePlanFeature } from "../../../../../../backend/middlewares/plan-gate.middleware";
 import { NextRequest } from "next/server";
 import { requireRole } from "../../../../../../backend/middlewares/role.middleware";
 import { successResponse, errorResponse } from "../../../../../../backend/utils/response";
@@ -16,6 +17,8 @@ const adjustmentSchema = z.object({
 export async function GET(req: NextRequest) {
   const auth = await requireRole(req, ["HOSPITAL_ADMIN", "SUB_DEPT_HEAD", "STAFF"]);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "SUB_DEPARTMENT_DASHBOARDS", auth.user.role);
+  if (planError) return planError;
 
   try {
     const { searchParams } = new URL(req.url);
@@ -31,6 +34,8 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const auth = await requireRole(req, ["HOSPITAL_ADMIN", "SUB_DEPT_HEAD"]);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "SUB_DEPARTMENT_DASHBOARDS", auth.user.role);
+  if (planError) return planError;
 
   try {
     const body = await req.json();

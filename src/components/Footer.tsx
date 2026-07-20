@@ -94,7 +94,7 @@ export default function Footer() {
       <div className={styles.bottomBar}>
         <div className={`container ${styles.bottomInner}`} style={{ justifyContent: "center" }}>
           <p className={styles.copyright} style={{ textAlign: "center" }}>
-            Copyright © {new Date().getFullYear()} PrimeInbox All rights reserved. | A product of <a href="https://brightwavedigital.com/" target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "underline" }}>Brightwave Digital Products</a>
+            Copyright © {new Date().getFullYear()} PrimeInbox All rights reserved. | A product of <span style={{ color: "inherit", fontWeight: 600 }}>Brightwave Digital Products LLP</span>
           </p>
         </div>
       </div>

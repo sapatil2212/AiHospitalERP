@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { authMiddleware } from "../../../../../../backend/middlewares/auth.middleware";
+import { requirePlanFeature } from "../../../../../../backend/middlewares/plan-gate.middleware";
 import prisma from "../../../../../../backend/config/db";
 
 const px = prisma as any;
@@ -22,6 +23,9 @@ export async function GET(req: NextRequest) {
   if (!hospitalId) {
     return new Response("No hospital context", { status: 400 });
   }
+
+  const planError = await requirePlanFeature(hospitalId, "PHARMACY", user.role);
+  if (planError) return planError;
 
   // Get pharmacy sub-dept for this user
   let pharmacySubDeptId: string | null = null;

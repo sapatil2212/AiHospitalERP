@@ -1,3 +1,4 @@
+import { requirePlanFeature } from "../../../../../../backend/middlewares/plan-gate.middleware";
 import { NextRequest } from "next/server";
 import { authMiddleware } from "../../../../../../backend/middlewares/auth.middleware";
 import { successResponse, errorResponse } from "../../../../../../backend/utils/response";
@@ -10,6 +11,8 @@ export const dynamic = "force-dynamic";
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   const { user, error } = await authMiddleware(req);
   if (error) return error;
+  const planError = await requirePlanFeature(user!.hospitalId || "", "SUB_DEPARTMENT_DASHBOARDS", user!.role);
+  if (planError) return planError;
   if (user!.role !== "SUB_DEPT_HEAD") return errorResponse("Forbidden", 403);
 
   try {
@@ -48,6 +51,8 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
   const { user, error } = await authMiddleware(req);
   if (error) return error;
+  const planError = await requirePlanFeature(user!.hospitalId || "", "SUB_DEPARTMENT_DASHBOARDS", user!.role);
+  if (planError) return planError;
   if (user!.role !== "SUB_DEPT_HEAD") return errorResponse("Forbidden", 403);
 
   try {

@@ -1,3 +1,4 @@
+import { requirePlanFeature } from "../../../../../../backend/middlewares/plan-gate.middleware";
 import { NextRequest } from "next/server";
 import { requireHospitalAdmin } from "../../../../../../backend/middlewares/role.middleware";
 import { successResponse, errorResponse } from "../../../../../../backend/utils/response";
@@ -12,6 +13,8 @@ export const dynamic = "force-dynamic";
 export async function POST(req: NextRequest) {
   const auth = await requireHospitalAdmin(req);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "SUB_DEPARTMENT_DASHBOARDS", auth.user.role);
+  if (planError) return planError;
 
   try {
     const hospital = await prisma.hospital.findUnique({

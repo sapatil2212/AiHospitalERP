@@ -1,3 +1,4 @@
+import { requirePlanFeature } from "../../../../../../backend/middlewares/plan-gate.middleware";
 import { NextRequest } from "next/server";
 import { requireHospitalAdmin } from "../../../../../../backend/middlewares/role.middleware";
 import { successResponse, errorResponse } from "../../../../../../backend/utils/response";
@@ -13,6 +14,8 @@ import { updateSubDepartmentSchema } from "../../../../../../backend/validations
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   const auth = await requireHospitalAdmin(req);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "SUB_DEPARTMENT_DASHBOARDS", auth.user.role);
+  if (planError) return planError;
   try {
     const data = await getSubDepartmentById(params.id, auth.hospitalId);
     return successResponse(data, "Sub-department fetched");
@@ -25,6 +28,8 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   const auth = await requireHospitalAdmin(req);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "SUB_DEPARTMENT_DASHBOARDS", auth.user.role);
+  if (planError) return planError;
   try {
     const body = await req.json();
     const validated = updateSubDepartmentSchema.safeParse(body);
@@ -40,6 +45,8 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   const auth = await requireHospitalAdmin(req);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "SUB_DEPARTMENT_DASHBOARDS", auth.user.role);
+  if (planError) return planError;
   try {
     const body = await req.json();
     if (typeof body.isActive === "boolean") {
@@ -56,6 +63,8 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
   const auth = await requireHospitalAdmin(req);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "SUB_DEPARTMENT_DASHBOARDS", auth.user.role);
+  if (planError) return planError;
   try {
     await deleteSubDepartment(params.id, auth.hospitalId);
     return successResponse(null, "Sub-department deleted successfully");

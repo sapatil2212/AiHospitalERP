@@ -1,3 +1,4 @@
+import { requirePlanFeature } from "../../../../../backend/middlewares/plan-gate.middleware";
 import { NextRequest } from "next/server";
 import { requireRole } from "../../../../../backend/middlewares/role.middleware";
 import { successResponse, errorResponse } from "../../../../../backend/utils/response";
@@ -8,6 +9,8 @@ const INV_READ_ROLES = ["HOSPITAL_ADMIN", "FINANCE_HEAD", "SUB_DEPT_HEAD"];
 export async function GET(req: NextRequest) {
   const auth = await requireRole(req, INV_READ_ROLES);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "REPORTS_ANALYTICS", auth.user.role);
+  if (planError) return planError;
 
   try {
     const data = await service.getInventoryReport(auth.hospitalId);

@@ -1,3 +1,4 @@
+import { requirePlanFeature } from "../../../../../backend/middlewares/plan-gate.middleware";
 import { NextRequest, NextResponse } from "next/server";
 import { requireRole } from "../../../../../backend/middlewares/role.middleware";
 import prisma from "../../../../../backend/config/db";
@@ -15,6 +16,8 @@ function toCSV(rows: string[][]): string {
 export async function GET(req: NextRequest) {
   const auth = await requireRole(req, ["HOSPITAL_ADMIN", "RECEPTIONIST", "STAFF", "DOCTOR"]);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "DATA_EXPORT", auth.user.role);
+  if (planError) return planError;
 
   const sp = req.nextUrl.searchParams;
   const gender    = sp.get("gender");

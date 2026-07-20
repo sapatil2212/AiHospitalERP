@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { processVoiceRecording } from "@/../../backend/services/voice-prescription.service";
 import { authMiddleware } from "@/../../backend/middlewares/auth.middleware";
+import { requirePlanFeature } from "@/../../backend/middlewares/plan-gate.middleware";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -13,6 +14,9 @@ export async function POST(req: NextRequest) {
     }
 
     const { hospitalId, role } = authResult.user;
+
+    const planError = await requirePlanFeature(hospitalId || "", "VOICE_PRESCRIPTION", role);
+    if (planError) return planError;
 
     if (role !== "DOCTOR" && role !== "HOSPITAL_ADMIN" && role !== "SUPER_ADMIN") {
       return NextResponse.json({ success: false, message: "Unauthorized role for voice prescription" }, { status: 403 });

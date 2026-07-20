@@ -1,3 +1,4 @@
+import { requirePlanFeature } from "../../../../../../backend/middlewares/plan-gate.middleware";
 import { NextRequest } from "next/server";
 import { requireRole } from "../../../../../../backend/middlewares/role.middleware";
 import { errorResponse } from "../../../../../../backend/utils/response";
@@ -8,6 +9,8 @@ export const dynamic = "force-dynamic";
 export async function GET(req: NextRequest) {
   const auth = await requireRole(req, ["SUB_DEPT_HEAD", "HOSPITAL_ADMIN"]);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "SUB_DEPARTMENT_DASHBOARDS", auth.user.role);
+  if (planError) return planError;
 
   try {
     const { searchParams } = new URL(req.url);

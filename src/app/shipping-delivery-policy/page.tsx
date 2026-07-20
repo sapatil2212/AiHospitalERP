@@ -32,6 +32,7 @@ export default function ShippingDeliveryPolicyPage() {
                 <Calendar size={14} />
                 Last updated: July 3, 2026
               </div>
+              <span className={styles.companyBadge}>A product of Brightwave Digital Products LLP.</span>
             </div>
           </div>
         </section>

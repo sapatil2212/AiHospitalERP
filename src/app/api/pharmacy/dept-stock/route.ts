@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { requireRole } from "../../../../../backend/middlewares/role.middleware";
+import { requirePlanFeature } from "../../../../../backend/middlewares/plan-gate.middleware";
 import { successResponse, errorResponse } from "../../../../../backend/utils/response";
 import { Role } from "@prisma/client";
 import { getLocationStockForDept } from "../../../../../backend/repositories/central-inventory.repo";
@@ -19,6 +20,8 @@ const px = prisma as any;
 export async function GET(req: NextRequest) {
   const auth = await requireRole(req, [Role.SUB_DEPT_HEAD, Role.HOSPITAL_ADMIN]);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "PHARMACY", auth.user.role);
+  if (planError) return planError;
 
   try {
     let subDepartmentId: string | null = null;

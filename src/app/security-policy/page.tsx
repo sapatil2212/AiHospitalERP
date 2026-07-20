@@ -32,6 +32,7 @@ export default function SecurityPolicyPage() {
                 <Calendar size={14} />
                 Last updated: July 3, 2026
               </div>
+              <span className={styles.companyBadge}>A product of Brightwave Digital Products LLP.</span>
             </div>
           </div>
         </section>
@@ -70,9 +71,8 @@ export default function SecurityPolicyPage() {
               <div id="encryption" className={styles.section}>
                 <h2 className={styles.sectionTitle}>2. Data Encryption</h2>
                 <ul className={styles.list}>
-                  <li className={styles.listItem}>All data at rest is encrypted using AES-256 encryption.</li>
-                  <li className={styles.listItem}>All data in transit is protected using TLS 1.2 or higher.</li>
-                  <li className={styles.listItem}>Encryption keys are managed securely and rotated on a regular basis.</li>
+                  <li className={styles.listItem}>All data in transit is protected using TLS 1.2 or higher (HTTPS).</li>
+                  <li className={styles.listItem}>Passwords are securely hashed and never stored in plain text.</li>
                 </ul>
               </div>
 
@@ -102,9 +102,8 @@ export default function SecurityPolicyPage() {
               <div id="compliance" className={styles.section}>
                 <h2 className={styles.sectionTitle}>5. Compliance</h2>
                 <p className={styles.sectionText}>
-                  We align our practices with recognized healthcare and data protection standards.
-                  We execute Business Associate Agreements (BAAs) with eligible healthcare entities
-                  to support HIPAA compliance, and we follow applicable data protection regulations.
+                  We align our practices with applicable Indian data protection regulations (IT Act, 2000
+                  and its rules) and follow industry best practices to safeguard healthcare data.
                 </p>
               </div>
 
@@ -114,7 +113,7 @@ export default function SecurityPolicyPage() {
                 <ul className={styles.list}>
                   <li className={styles.listItem}>Systems are continuously monitored for suspicious activity and anomalies.</li>
                   <li className={styles.listItem}>Audit logs record access to sensitive data for accountability and traceability.</li>
-                  <li className={styles.listItem}>We conduct regular security reviews and third-party penetration testing.</li>
+                  <li className={styles.listItem}>We conduct regular internal security reviews.</li>
                 </ul>
               </div>
 

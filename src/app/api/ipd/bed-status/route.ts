@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { requireHospitalAdmin } from "../../../../../backend/middlewares/role.middleware";
+import { requirePlanFeature } from "../../../../../backend/middlewares/plan-gate.middleware";
 import { successResponse, errorResponse } from "../../../../../backend/utils/response";
 import {
   getBedStatusOverviewService, getAllAllocationsService, updateBedStatusService, AllocationServiceError,
@@ -14,6 +15,8 @@ const statusSchema = z.object({
 export async function GET(req: NextRequest) {
   const auth = await requireHospitalAdmin(req);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "IPD_WARD", auth.user.role);
+  if (planError) return planError;
   try {
     const sp = req.nextUrl.searchParams;
     const type = sp.get("type");
@@ -67,6 +70,8 @@ export async function GET(req: NextRequest) {
 export async function PATCH(req: NextRequest) {
   const auth = await requireHospitalAdmin(req);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "IPD_WARD", auth.user.role);
+  if (planError) return planError;
   try {
     const body = await req.json();
     const result = statusSchema.safeParse(body);

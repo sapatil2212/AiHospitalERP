@@ -1,4 +1,7 @@
 import { NextResponse } from "next/server";
+import { requirePlanFeature } from "@/../../backend/middlewares/plan-gate.middleware";
+import { getUserFromRequest } from "@/../../backend/middlewares/permission.middleware";
+import { NextRequest } from "next/server";
 
 const getOpenRouterKey = () => process.env.OPENROUTER_API_KEY || "";
 const getGeminiKey    = () => process.env.GEMINI_API_KEY || "";
@@ -134,9 +137,18 @@ async function tryGemini(msgs: ReturnType<typeof buildMessages>): Promise<string
   return null;
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
-    const { message, history } = await req.json();
+    const user = getUserFromRequest(req);
+    const body = await req.json();
+    const { message, history, hospitalId: bodyHospitalId } = body;
+
+    const hospitalId = user?.hospitalId || bodyHospitalId;
+    if (hospitalId) {
+      const planError = await requirePlanFeature(hospitalId, "AI_CHATBOT", user?.role);
+      if (planError) return planError;
+    }
+
     const msgs = buildMessages(history, message);
 
     // 1. Try OpenRouter models in order

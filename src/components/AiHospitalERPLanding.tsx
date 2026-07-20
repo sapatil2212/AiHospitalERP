@@ -31,7 +31,6 @@ export default function AiHospitalERPLanding() {
   const [aiTab, setAiTab] = useState<"smart" | "voice">("smart");
   const [rxStep, setRxStep] = useState(0);
   const [voiceActive, setVoiceActive] = useState(false);
-  const [expandedPrice, setExpandedPrice] = useState<string | null>(null);
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
   const [isSubmittingDemo, setIsSubmittingDemo] = useState(false);
   const [demoSuccess, setDemoSuccess] = useState(false);
@@ -97,7 +96,6 @@ export default function AiHospitalERPLanding() {
       desc: "For small clinics & solo practitioners",
       badge: null as string | null,
       tag: "Get started free",
-      websiteTag: "Clinic Profile Page + Booking",
       features: [
         { label: "Up to 3 Doctors", included: true },
         { label: "OPD & Appointments", included: true },
@@ -112,16 +110,6 @@ export default function AiHospitalERPLanding() {
         { label: "Pharmacy & Inventory", included: false },
         { label: "AI Smart Prescription", included: false },
       ],
-      website: [
-        { label: "1-Page Public Clinic Profile", included: true },
-        { label: "Online Appointment Booking", included: true },
-        { label: "Doctor Listing & Profiles", included: true },
-        { label: "SEO Meta Tags & Structured Data", included: true },
-        { label: "Contact & Enquiry Form", included: true },
-        { label: "Multi-Page Website", included: false },
-        { label: "Blog / Treatments Pages", included: false },
-        { label: "Custom Domain & SSL", included: false },
-      ],
     },
     {
       name: "Pro",
@@ -130,7 +118,6 @@ export default function AiHospitalERPLanding() {
       desc: "For growing hospitals with full clinical operations",
       badge: "Most Popular",
       tag: "Most chosen",
-      websiteTag: "Multi-Page SEO Website + Booking Engine",
       features: [
         { label: "Up to 25 Doctors", included: true },
         { label: "OPD + IPD + Ward Management", included: true },
@@ -145,16 +132,6 @@ export default function AiHospitalERPLanding() {
         { label: "WhatsApp Widget & Notifications", included: true },
         { label: "Reports & Analytics", included: true },
       ],
-      website: [
-        { label: "Multi-Page Hospital Website", included: true },
-        { label: "Real-Time Online Booking Engine", included: true },
-        { label: "Doctor Profiles & Specialty Pages", included: true },
-        { label: "Services & Treatments Pages", included: true },
-        { label: "SEO-Optimised Pages + XML Sitemap", included: true },
-        { label: "About, Contact & Blog Pages", included: true },
-        { label: "WhatsApp & Call-to-Action Widgets", included: true },
-        { label: "Custom Domain & SSL", included: false },
-      ],
     },
     {
       name: "Enterprise",
@@ -163,7 +140,6 @@ export default function AiHospitalERPLanding() {
       desc: "For hospital networks, chains & multi-location care",
       badge: "Full Suite",
       tag: "Talk to us",
-      websiteTag: "Custom-Branded Website + Full Booking Suite",
       features: [
         { label: "Unlimited Doctors & Staff", included: true },
         { label: "Multi-Hospital Super Admin", included: true },
@@ -177,16 +153,6 @@ export default function AiHospitalERPLanding() {
         { label: "Receptionist & Nursing Admin Roles", included: true },
         { label: "Dedicated Account Manager", included: true },
         { label: "Priority SLA + 24/7 Phone Support", included: true },
-      ],
-      website: [
-        { label: "Custom-Branded Multi-Page Website", included: true },
-        { label: "Full Booking Engine + Patient Portal", included: true },
-        { label: "Blog, Treatments & Medical Tourism Pages", included: true },
-        { label: "Custom Domain & SSL Certificate", included: true },
-        { label: "Advanced SEO + Schema Markup", included: true },
-        { label: "Multi-Location Pages", included: true },
-        { label: "Google Analytics Integration", included: true },
-        { label: "Priority Website Support", included: true },
       ],
     },
   ];
@@ -1944,7 +1910,6 @@ export default function AiHospitalERPLanding() {
               const price = annualBilling ? p.annualPrice : p.monthlyPrice;
               const isPro = p.name === "Pro";
               const cardClass = isPro ? "primary" : "";
-              const webOpen = expandedPrice === p.name;
               return (
                 <div key={p.name} className={`mn-price-card ${cardClass}`}>
                   {p.badge && <div className="mn-price-badge">{p.badge}</div>}
@@ -1967,35 +1932,6 @@ export default function AiHospitalERPLanding() {
                       </li>
                     ))}
                   </ul>
-
-                  {/* Website & Booking accordion */}
-                  <button
-                    className="mn-price-web-toggle"
-                    onClick={() => setExpandedPrice(webOpen ? null : p.name)}
-                  >
-                    <span style={{ display: "flex", alignItems: "center", gap: 7 }}>
-                      <span className="mn-price-web-icon">
-                        <Globe size={12} />
-                      </span>
-                      <span>Website &amp; Booking Engine</span>
-                    </span>
-                    <span style={{ display: "flex", alignItems: "center", gap: 7 }}>
-                      <span className="mn-price-web-tag">{p.websiteTag}</span>
-                      <span className={`mn-price-web-chevron${webOpen ? " open" : ""}`}>
-                        <ChevronRight size={13} style={{ transform: "rotate(90deg)" }} />
-                      </span>
-                    </span>
-                  </button>
-                  {webOpen && (
-                    <ul className="mn-price-web-list">
-                      {p.website.map(w => (
-                        <li key={w.label} className={`mn-price-web-item ${w.included ? "on" : "off"}`}>
-                          <span className="mn-price-web-dot">{w.included ? "✓" : "–"}</span>
-                          {w.label}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
 
                   <Link href={p.name === "Enterprise" ? "/contact" : `/signup?plan=${p.name.toLowerCase()}`} style={{ display: "block", textDecoration: "none", marginTop: 20 }}>
                     {p.name === "Enterprise" ? (
@@ -2120,7 +2056,7 @@ export default function AiHospitalERPLanding() {
           <div className="mn-footer-divider" />
 
           <div className="mn-footer-bottom">
-            <p className="mn-footer-copy">Copyright © {new Date().getFullYear()} PrimeInbox All rights reserved. | A product of <a href="https://brightwavedigital.com/" target="_blank" rel="noopener noreferrer" style={{ color: '#A78BFA', textDecoration: 'none', fontWeight: 600 }}>Brightwave Digital Products</a></p>
+            <p className="mn-footer-copy">Copyright © {new Date().getFullYear()} PrimeInbox All rights reserved. | A product of <span style={{ color: '#A78BFA', fontWeight: 600 }}>Brightwave Digital Products LLP</span></p>
           </div>
         </div>
       </footer>

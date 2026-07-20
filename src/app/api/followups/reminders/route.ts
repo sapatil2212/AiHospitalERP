@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { requireHospitalAdmin } from "../../../../../backend/middlewares/role.middleware";
 import { authMiddleware } from "../../../../../backend/middlewares/auth.middleware";
+import { requirePlanFeature } from "../../../../../backend/middlewares/plan-gate.middleware";
 import { successResponse, errorResponse } from "../../../../../backend/utils/response";
 import prisma from "../../../../../backend/config/db";
 import { notify } from "../../../../../backend/services/notification.service";
@@ -12,6 +13,9 @@ export async function GET(req: NextRequest) {
 
   const hospitalId = user!.hospitalId;
   if (!hospitalId) return errorResponse("No hospital context", 400);
+
+  const planError = await requirePlanFeature(hospitalId, "FOLLOWUP_SYSTEM", user!.role);
+  if (planError) return planError;
 
   const now = new Date();
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());

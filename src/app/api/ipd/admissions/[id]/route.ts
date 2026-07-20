@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { requireHospitalAdmin } from "../../../../../../backend/middlewares/role.middleware";
+import { requirePlanFeature } from "../../../../../../backend/middlewares/plan-gate.middleware";
 import { successResponse, errorResponse } from "../../../../../../backend/utils/response";
 import {
   getIPDAdmission,
@@ -22,6 +23,8 @@ const updateSchema = z.object({
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   const auth = await requireHospitalAdmin(req);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "IPD_WARD", auth.user.role);
+  if (planError) return planError;
   try {
     const data = await getIPDAdmission(params.id, auth.hospitalId);
     return successResponse(data, "IPD admission fetched");
@@ -34,6 +37,8 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   const auth = await requireHospitalAdmin(req);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "IPD_WARD", auth.user.role);
+  if (planError) return planError;
   try {
     const body = await req.json();
     const result = updateSchema.safeParse(body);
@@ -49,6 +54,8 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
   const auth = await requireHospitalAdmin(req);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "IPD_WARD", auth.user.role);
+  if (planError) return planError;
   try {
     const body = await req.json().catch(() => ({}));
     const data = await dischargePatientIPD(auth.hospitalId, params.id, body);

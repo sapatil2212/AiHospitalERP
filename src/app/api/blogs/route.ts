@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { requireHospitalAdmin } from "../../../../backend/middlewares/role.middleware";
+import { requirePlanFeature } from "../../../../backend/middlewares/plan-gate.middleware";
 import { successResponse, errorResponse } from "../../../../backend/utils/response";
 import { createBlogSchema } from "../../../../backend/validations/blog.validation";
 import * as blogService from "../../../../backend/services/blog.service";
@@ -55,6 +56,8 @@ export async function GET(req: NextRequest) {
     // Admin endpoint — requires auth
     const auth = await requireHospitalAdmin(req);
     if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "BLOG_CMS", auth.user.role);
+  if (planError) return planError;
 
     if (stats) {
       const blogStats = await blogService.getBlogStats(auth.hospitalId);
@@ -78,6 +81,8 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const auth = await requireHospitalAdmin(req);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "BLOG_CMS", auth.user.role);
+  if (planError) return planError;
 
   try {
     const body = await req.json();

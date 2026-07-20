@@ -1,11 +1,14 @@
 import { NextRequest } from "next/server";
 import { authMiddleware } from "../../../../../../backend/middlewares/auth.middleware";
+import { requirePlanFeature } from "../../../../../../backend/middlewares/plan-gate.middleware";
 import { successResponse, errorResponse } from "../../../../../../backend/utils/response";
 import prisma from "../../../../../../backend/config/db";
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   const { user, error } = await authMiddleware(req);
   if (error) return error;
+  const planError = await requirePlanFeature(user!.hospitalId || "", "LAB_PATHOLOGY", user!.role);
+  if (planError) return planError;
 
   try {
     const order = await (prisma as any).labOrder.findUnique({
@@ -33,6 +36,8 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   const { user, error } = await authMiddleware(req);
   if (error) return error;
+  const planError = await requirePlanFeature(user!.hospitalId || "", "LAB_PATHOLOGY", user!.role);
+  if (planError) return planError;
   if (!["SUB_DEPT_HEAD", "HOSPITAL_ADMIN", "STAFF"].includes(user!.role)) return errorResponse("Forbidden", 403);
 
   try {
@@ -83,6 +88,8 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
   const { user, error } = await authMiddleware(req);
   if (error) return error;
+  const planError = await requirePlanFeature(user!.hospitalId || "", "LAB_PATHOLOGY", user!.role);
+  if (planError) return planError;
   if (!["SUB_DEPT_HEAD", "HOSPITAL_ADMIN"].includes(user!.role)) return errorResponse("Forbidden", 403);
 
   try {

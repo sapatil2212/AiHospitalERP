@@ -139,6 +139,7 @@ export default function PrivacyPolicyPage() {
                 <Calendar size={14} />
                 Last updated: May 18, 2026
               </div>
+              <span className={styles.companyBadge}>A product of Brightwave Digital Products LLP.</span>
             </div>
           </div>
         </section>
@@ -154,7 +155,7 @@ export default function PrivacyPolicyPage() {
                   <li className={styles.tocItem}><a href="#info-collect" className={styles.tocLink}>Information We Collect</a></li>
                   <li className={styles.tocItem}><a href="#how-use" className={styles.tocLink}>How We Use Your Information</a></li>
                   <li className={styles.tocItem}><a href="#info-share" className={styles.tocLink}>How We Share Your Information</a></li>
-                  <li className={styles.tocItem}><a href="#data-security" className={styles.tocLink}>Data Security & HIPAA</a></li>
+                  <li className={styles.tocItem}><a href="#data-security" className={styles.tocLink}>Data Security</a></li>
                   <li className={styles.tocItem}><a href="#data-retention" className={styles.tocLink}>Data Retention</a></li>
                   <li className={styles.tocItem}><a href="#your-rights" className={styles.tocLink}>Your Rights</a></li>
                   <li className={styles.tocItem}><a href="#cookies" className={styles.tocLink}>Cookies & Tracking</a></li>
@@ -198,18 +199,17 @@ export default function PrivacyPolicyPage() {
                 </ul>
               </div>
 
-              {/* 3. How We Share Your Information */}
               <div id="info-share" className={styles.section}>
                 <h2 className={styles.sectionTitle}>3. How We Share Your Information</h2>
                 <p className={styles.sectionText}>
-                  We strictly limit data sharing. We only share information with:
+                   We strictly limit data sharing. We only share information with:
                 </p>
                 <ul className={styles.list}>
                   <li className={styles.listItem}>
-                    <strong>Cloud Infrastructure Partners:</strong> E.g., AWS, for secure hosting of the SaaS platform.
+                    <strong>Hosting & Infrastructure Providers:</strong> Our platform uses cloud hosting and CDN services (e.g., Vercel, Cloudinary) to securely deliver the application.
                   </li>
                   <li className={styles.listItem}>
-                    <strong>Payment Gateways:</strong> To process your SaaS subscription payments securely.
+                    <strong>Communication Services:</strong> We use third-party email (Gmail SMTP) and SMS (Twilio) services to send appointment reminders and notifications.
                   </li>
                   <li className={styles.listItem}>
                     <strong>Legal Requirements:</strong> When compelled by law, regulation, or legal process.
@@ -219,15 +219,15 @@ export default function PrivacyPolicyPage() {
 
               {/* 4. Data Security */}
               <div id="data-security" className={styles.section}>
-                <h2 className={styles.sectionTitle}>4. Data Security & HIPAA Compliance</h2>
+                <h2 className={styles.sectionTitle}>4. Data Security</h2>
                 <p className={styles.sectionText}>
-                  Security is our top priority. We implement enterprise-grade protections for all healthcare data.
+                  Security is our top priority. We implement robust protections for all healthcare data.
                 </p>
                 <ul className={styles.list}>
-                  <li className={styles.listItem}>End-to-end AES-256 encryption for data at rest and TLS for data in transit.</li>
+                  <li className={styles.listItem}>All data transmitted between your browser and our servers is encrypted using TLS (HTTPS).</li>
                   <li className={styles.listItem}>Strict role-based access control (RBAC) and data isolation between hospital tenants.</li>
-                  <li className={styles.listItem}>Regular third-party security audits and penetration testing.</li>
-                  <li className={styles.listItem}>Execution of Business Associate Agreements (BAAs) with eligible healthcare entities to ensure HIPAA compliance.</li>
+                  <li className={styles.listItem}>Passwords are securely hashed and never stored in plain text.</li>
+                  <li className={styles.listItem}>We follow applicable Indian data protection regulations (IT Act, 2000 and its rules) and industry best practices.</li>
                 </ul>
               </div>
 
@@ -244,7 +244,7 @@ export default function PrivacyPolicyPage() {
               <div id="contact" className={styles.section}>
                 <h2 className={styles.sectionTitle}>6. Contact Us</h2>
                 <p className={styles.sectionText}>
-                  If you have questions about this policy or need to execute a BAA, please contact our privacy officer:
+                  If you have questions about this policy, please contact us:
                 </p>
                 <ul className={styles.list}>
                   <li className={styles.listItem}><strong>Email:</strong> <a href="mailto:aihospitalerp@gmail.com" className={styles.contactLink}>aihospitalerp@gmail.com</a></li>
@@ -311,7 +311,7 @@ export default function PrivacyPolicyPage() {
           </div>
           <div className="mn-footer-divider" />
           <div className="mn-footer-bottom">
-            <p className="mn-footer-copy">Copyright © {new Date().getFullYear()} PrimeInbox All rights reserved. | A product of <a href="https://brightwavedigital.com/" target="_blank" rel="noopener noreferrer" style={{ color: '#A78BFA', textDecoration: 'none', fontWeight: 600 }}>Brightwave Digital Products</a></p>
+            <p className="mn-footer-copy">Copyright © {new Date().getFullYear()} PrimeInbox All rights reserved. | A product of <span style={{ color: '#A78BFA', fontWeight: 600 }}>Brightwave Digital Products LLP</span></p>
             <div className="mn-footer-legal">
               <Link href="/privacy-policy">Privacy</Link>
               <Link href="/terms-of-service">Terms</Link>

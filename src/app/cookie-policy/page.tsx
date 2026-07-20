@@ -32,6 +32,7 @@ export default function CookiePolicyPage() {
                 <Calendar size={14} />
                 Last updated: April 1, 2026
               </div>
+              <span className={styles.companyBadge}>A product of Brightwave Digital Products LLP.</span>
             </div>
           </div>
         </section>

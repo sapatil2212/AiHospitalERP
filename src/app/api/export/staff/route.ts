@@ -1,3 +1,4 @@
+import { requirePlanFeature } from "../../../../../backend/middlewares/plan-gate.middleware";
 import { NextRequest } from "next/server";
 import { requireRole } from "../../../../../backend/middlewares/role.middleware";
 
@@ -10,6 +11,8 @@ export const dynamic = "force-dynamic";
 export async function GET(req: NextRequest) {
   const auth = await requireRole(req, HR_ROLES);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "DATA_EXPORT", auth.user.role);
+  if (planError) return planError;
 
   try {
     const { searchParams } = new URL(req.url);

@@ -1,3 +1,4 @@
+import { requirePlanFeature } from "../../../../../backend/middlewares/plan-gate.middleware";
 import { NextRequest } from "next/server";
 import { requireRole } from "../../../../../backend/middlewares/role.middleware";
 import { successResponse, errorResponse } from "../../../../../backend/utils/response";
@@ -9,6 +10,8 @@ import prisma from "../../../../../backend/config/db";
 export async function GET(req: NextRequest) {
   const auth = await requireRole(req, ["SUB_DEPT_HEAD", "HOSPITAL_ADMIN"]);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "INVENTORY_MANAGEMENT", auth.user.role);
+  if (planError) return planError;
 
   try {
     const { searchParams } = new URL(req.url);

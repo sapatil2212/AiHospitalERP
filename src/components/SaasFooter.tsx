@@ -102,7 +102,7 @@ export default function SaasFooter() {
           <div className="mn-footer-divider" />
 
           <div className="mn-footer-bottom">
-            <p className="mn-footer-copy">Copyright © {new Date().getFullYear()} PrimeInbox All rights reserved. | A product of <a href="https://brightwavedigital.com/" target="_blank" rel="noopener noreferrer" style={{ color: "#A78BFA", textDecoration: "none", fontWeight: 600 }}>Brightwave Digital Products</a></p>
+            <p className="mn-footer-copy">Copyright © {new Date().getFullYear()} PrimeInbox All rights reserved. | A product of <span style={{ color: "#A78BFA", fontWeight: 600 }}>Brightwave Digital Products LLP</span></p>
           </div>
         </div>
       </footer>

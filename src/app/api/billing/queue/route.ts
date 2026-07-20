@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { requireRole } from "../../../../../backend/middlewares/role.middleware";
+import { requirePlanFeature } from "../../../../../backend/middlewares/plan-gate.middleware";
 import { successResponse, errorResponse } from "../../../../../backend/utils/response";
 import { getBillingQueue, BillingServiceError } from "../../../../../backend/services/billing.service";
 
@@ -10,6 +11,8 @@ export const dynamic = "force-dynamic";
 export async function GET(req: NextRequest) {
   const auth = await requireRole(req, ALLOWED);
   if (auth.error) return auth.error;
+  const planError = await requirePlanFeature(auth.hospitalId, "BILLING_QUEUE_FINANCE", auth.user.role);
+  if (planError) return planError;
   try {
     const url = new URL(req.url);
     const limitParam = url.searchParams.get("limit");

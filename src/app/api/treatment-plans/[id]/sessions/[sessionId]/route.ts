@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { treatmentService } from "../../../../../../../backend/services/treatment.service";
 import { updateTreatmentSessionSchema } from "../../../../../../../backend/validations/treatment.validation";
 import { withAuth, checkPermission, createPermissionError, createUnauthorizedError } from "../../../../../../../backend/middlewares/permission.middleware";
+import { requirePlanFeature } from "../../../../../../../backend/middlewares/plan-gate.middleware";
 
 export async function PUT(
   req: NextRequest,
@@ -10,6 +11,8 @@ export async function PUT(
   try {
     const authReq = withAuth(req);
     if (!authReq.user) return createUnauthorizedError();
+    const planError = await requirePlanFeature(authReq.user.hospitalId, "TREATMENT_PLANS", authReq.user.role);
+    if (planError) return planError;
 
     if (!checkPermission(authReq, "PROCEDURE_PERFORM")) return createPermissionError("PROCEDURE_PERFORM");
 
